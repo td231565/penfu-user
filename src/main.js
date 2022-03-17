@@ -2,7 +2,10 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import store from './store'
+import '@/assets/style/bootstrap-utilities.min.css'
+import { VueMasonryPlugin } from 'vue-masonry'
 
+Vue.use(VueMasonryPlugin)
 Vue.config.productionTip = false
 
 new Vue({
