@@ -10,21 +10,14 @@ const routes = [
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/about',
-    name: 'About',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/attraction/list',
+    name: 'AttractionList',
+    component: () => import(/* webpackChunkName: "AttractionList" */ '../views/attraction/List.vue')
   },
   {
-    path: '/product',
-    redirect: '/product/list',
-    name: 'Product',
-    children: [
-      {
-        path: 'list',
-        name: 'ProductList',
-        component: () => import('../views/product/List.vue')
-      }
-    ]
+    path: '/attraction/detail/:id',
+    name: 'AttractionDetail',
+    component: () => import(/* webpackChunkName: "AttractionDetail" */ '../views/attraction/Detail.vue')
   }
 ]
 
