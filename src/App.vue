@@ -23,6 +23,7 @@ html, body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+  letter-spacing: 0.5px;
 }
 
 #nav {

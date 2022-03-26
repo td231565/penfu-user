@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading.fullscreen.lock="isLoading">
     <header class="text-white mb-2 position-relative">
       <img src="@/assets/image/attraction_top.jpg" alt="" class="w-100 px-3">
       <div class="position-absolute top-0 start-0 w-100 h-100 pb-3 px-4 d-flex justify-content-between align-items-end">
@@ -54,6 +54,7 @@ export default {
   name: 'AttractionList',
   data() {
     return {
+      isLoading: false,
       currentTagKey: 'latest',
       tagList: [
         { key: 'latest', title: '最新' },
@@ -70,11 +71,9 @@ export default {
   created() {
     this.getList()
   },
-  mounted() {
-    console.log(this.colWidth)
-  },
   methods: {
     getList(page, param) {
+      this.isLoading = true
       console.log(page, param)
       setTimeout(() => {
         this.list = new Array(10).fill(0).map((_, idx) => ({
@@ -83,6 +82,7 @@ export default {
           desc: '今日東港鎮海東港公園一帶本有今日東港鎮海東港公園一帶本有今日東港鎮海東港公園一帶本有今日東港鎮海東港公園一帶本有',
           image: `http://placekitten.com/200/${idx % 3 + 1}00`
         }))
+        this.isLoading = false
       }, 1000)
     },
     gotoDetailPage(id) {
@@ -93,13 +93,5 @@ export default {
 </script>
 
 <style>
-.ellipsis-1, .ellipsis-2 {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-}
-.ellipsis-2 {
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
+
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading.fullscreen.lock="isLoading">
     <div class="w-100 text-start">
       <i class="el-icon-arrow-left fw-bold fs-3 p-3" @click="gotoList"></i>
     </div>
@@ -36,6 +36,7 @@ export default {
   name: 'AttractionDetail',
   data() {
     return {
+      isLoading: false,
       detailData: {
         map: {}
       }
@@ -52,6 +53,7 @@ export default {
   },
   methods: {
     getDetailData() {
+      this.isLoading = true
       console.log(this.$route.params.id)
       setTimeout(() => {
         this.detailData = {
@@ -64,6 +66,7 @@ export default {
           })),
           map: { lat: 22.49, lng: 120.473509 }
         }
+        this.isLoading = false
       }, 1500)
     },
     gotoList() {
