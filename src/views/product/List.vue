@@ -23,10 +23,10 @@
             </p>
             <p class="my-0 fs-7 ls-0">已售出 {{ item.sold }}</p>
           </div>
-          <div class="rounded-pill bg-blue text-white py-2 px-3">
+          <button class="btn" @click="gotoDetailPage(item.id)">
             <i class="el-icon-search me-1"></i>
             <span>More</span>
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -42,10 +42,10 @@
               <span class="fs-5">{{ item.price }}</span>
             </p>
           </div>
-          <div class="rounded-pill bg-blue text-white py-2 px-3" @click="gotoDetailPage(item.id)">
+          <button class="btn" @click="gotoDetailPage(item.id)">
             <i class="el-icon-date me-1"></i>
             <span>Booking</span>
-          </div>
+          </button>
         </div>
       </div>
     </div>
@@ -66,9 +66,6 @@ export default {
       list: []
     }
   },
-  // created() {
-  //   this.getList()
-  // },
   watch: {
     currentTagKey: {
       immediate: true,
@@ -84,7 +81,7 @@ export default {
       setTimeout(() => {
         this.list = new Array(10).fill(0).map((_, idx) => ({
           id: `attraction-${new Date().valueOf() + idx}`,
-          title: '紀念手環',
+          title: this.currentTagKey === 'ticket' ? '餐宴船' : '紀念手環',
           desc: '票券說明票券說明票券說明票券說明票券說明票券說明票券說明票券說明票券說明票券說明票券說明票券說明票券說明票券說明',
           price: '1234',
           sold: 123,
