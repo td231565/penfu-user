@@ -64,6 +64,7 @@ export default {
             id: new Date().valueOf() + idx,
             imageLink: 'http://placekitten.com/500/300'
           })),
+          contentArticle: '<p>contentArticle good aaaaaaaaa</p><p><img src="https://i.imgur.com/6F9Oo9F.jpg" alt="" width="1200" height="675" /></p>',
           map: { lat: 22.49, lng: 120.473509 }
         }
         this.isLoading = false
