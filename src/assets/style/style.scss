@@ -46,16 +46,25 @@ $product-blue: #009fe8;
   letter-spacing: 0.25rem !important;
 }
 
+/* Cursor */
+.cursor-pointer {
+  cursor: pointer;
+}
+.cursor-not-allowed {
+  cursor: not-allowed;
+}
+
 /* Button */
 .btn {
   padding: 0.5rem 1rem;
   display: flex;
   justify-content: center;
   align-items: center;
-  line-height: 1;
+  line-height: normal;
+  letter-spacing: 0.5px;
   color: #fff;
-  background-color: #009fe8;
-  border: none;
+  background-color: $product-blue;
+  border: 1px solid $product-blue;
   border-radius: 50rem;
   cursor: pointer;
 }

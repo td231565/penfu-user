@@ -21,6 +21,7 @@
         <span class="ls-1 fs-6">立即訂購</span>
       </button>
     </div>
+    <!-- 購買 -->
     <el-dialog
       :visible.sync="dialogVisible"
       width="90%"
@@ -71,13 +72,9 @@
         <span class="fw-bold">$ {{ detailData.price * purchaseData.amount }}</span>
       </div>
       <div class="my-2 p-1 d-flex justify-content-center align-items-center">
-        <div class="rounded-circle border border-blue p-1" @click="purchaseData.amount > 1 && purchaseData.amount--">
-          <i class="el-icon-minus fw-bold"></i>
-        </div>
+        <i class="el-icon-remove-outline fs-1 text-blue cursor-pointer" @click="purchaseData.amount > 1 && purchaseData.amount--"></i>
         <span class="w-45 text-center fs-5">{{ purchaseData.amount }}</span>
-        <div class="rounded-circle border border-blue p-1" @click="purchaseData.amount++">
-          <i class="el-icon-plus fw-bold"></i>
-        </div>
+        <i class="el-icon-circle-plus-outline fs-1 text-blue cursor-pointer" @click="purchaseData.amount++"></i>
       </div>
       <p class="my-0 fs-7">
         <i class="el-icon-circle-check text-blue me-1"></i>
