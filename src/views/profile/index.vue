@@ -1,5 +1,5 @@
 <template>
-  <div class="profile-bg h-min-100vh p-3">
+  <div class="profile-bg h-min-100vh p-3" v-loading.fullscreen.lock="isLoading">
     <header class="d-flex align-items-center">
       <span class="w-1-3"></span>
       <span class="text-white fw-bold w-1-3 text-center">個人中心</span>
@@ -10,18 +10,18 @@
     <div class="p-3 rounded-3 bg-white">
       <!-- Tab -->
       <div class="pb-3 border-bottom border-2 border-blue d-flex justify-content-center align-items-center" style="height: 34px;">
-        <div class="d-flex justify-content-center align-items-center w-45">
+        <div class="d-flex justify-content-center align-items-center w-45 cursor-pointer" @click="$router.push({name: 'ProfileFolder'})">
           <i class="el-icon-discount text-blue me-2"></i>
           <span>我的票券</span>
         </div>
-        <div class="d-flex justify-content-center align-items-center w-45">
+        <div class="d-flex justify-content-center align-items-center w-45 cursor-pointer" @click="$router.push({name: 'ProfileDetail'})">
           <i class="el-icon-user text-blue me-2"></i>
           <span>會員資訊</span>
         </div>
       </div>
       <div class="d-flex justify-content-between align-items-center my-3">
         <span class="fw-bold">我的訂單</span>
-        <div class="d-flex align-items-center">
+        <div class="d-flex align-items-center cursor-pointer">
           <span class="text-secondary">查看全部訂單</span>
           <i class="el-icon-arrow-right text-secondary ms-1"></i>
         </div>
@@ -29,10 +29,10 @@
       <!-- Tickets -->
       <div v-for="(item, idx) in detailData.orders" :key="item.id" class="ticket" :class="{'mb-3': idx !== detailData.orders.length - 1}">
         <div class="ticket__left">
-          <VueQrcode :value="item.qr" :options="{ width: 76, margin: 0, scale: 2 }" style="margin-top: -3px;" />
+          <VueQrcode :value="item.qr" :options="qrOptions" style="margin-top: -3px;" />
         </div>
         <div class="ticket__right">
-          <p class="my-2">{{ item.title }}</p>
+          <p class="mt-1 mb-2">{{ item.title }}</p>
           <p class="my-0 text-blue fs-7">訂單有效</p>
           <p class="my-0 text-secondary fs-7">有效日期 {{ item.startDate }} 至 {{ item.endDate }}</p>
         </div>
@@ -49,6 +49,7 @@ export default {
   components: { VueQrcode },
   data() {
     return {
+      isLoading: false,
       detailData: {
         name: '羅密歐',
         phone: '0987654321',
@@ -100,7 +101,8 @@ export default {
             qr: 'https://www.google.com'
           }
         ]
-      }
+      },
+      qrOptions: { width: 76, margin: 0, scale: 2 }
     }
   }
 }
@@ -112,9 +114,6 @@ export default {
 }
 .h-min-100vh {
   min-height: 100vh;
-}
-.w-1-3 {
-  width: calc(100% / 3);
 }
 .ticket {
   width: 100%;
@@ -129,7 +128,7 @@ export default {
     justify-content: center;
     align-items: center;
     position: relative;
-    &::before {
+    &::before, &::after {
       content: '';
       display: block;
       width: 10px;
@@ -139,27 +138,14 @@ export default {
       right: -8px;
       border-radius: 50%;
       background-color: #fff;
-      border-top: 2px solid #fff;
-      border-left: 2px solid #fff;
-      border-right: 2px solid #ddd;
-      border-bottom: 2px solid #ddd;
+      border-width: 2px;
+      border-style: solid;
+      border-color: #fff #ddd #ddd #fff;
       transform: rotate(45deg);
     }
     &::after {
-      content: '';
-      display: block;
-      width: 10px;
-      height: 10px;
-      position: absolute;
-      bottom: -5px;
-      right: -8px;
-      border-radius: 50%;
-      background-color: #fff;
-      border-top: 2px solid #ddd;
-      border-left: 2px solid #ddd;
-      border-bottom: 2px solid #fff;
-      border-right: 2px solid #fff;
-      transform: rotate(45deg);
+      top: calc(100% - 9px);
+      border-color: #ddd #fff #fff #ddd;
     }
   }
   &__right {

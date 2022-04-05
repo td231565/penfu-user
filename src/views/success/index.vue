@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading.fullscreen.lock="isLoading">
     <header>
       <img src="http://placekitten.com/500/300" alt="" class="w-100">
     </header>
@@ -41,6 +41,7 @@ export default {
   name: 'Success',
   data() {
     return {
+      isLoading: false,
       paymentData: {
         title: '商品名稱',
         price: 399,

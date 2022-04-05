@@ -11,7 +11,7 @@
           <div
             v-for="(tag, idx) in tagList"
             :key="tag.key"
-            class="border rounded-pill py-1 px-3 border-2 border-white"
+            class="border rounded-pill py-1 px-3 border-2 border-white cursor-pointer"
             :class="{
               'bg-white text-info fw-bold': tag.key === currentTagKey,
               'me-2': idx !== tagList.length - 1
@@ -33,7 +33,7 @@
         v-for="(item, idx) in list"
         :key="item.id"
         v-masonry-tile
-        class="grid-item p-1"
+        class="grid-item p-1 cursor-pointer"
         :class="{
           'grid-size': idx === 0,
           'pe-2': idx % 2 === 0

@@ -4,7 +4,7 @@
       <div
         v-for="tag in tagList"
         :key="tag.key"
-        class="rounded-pill py-1 px-3 w-50 text-center"
+        class="rounded-pill py-1 px-3 w-50 text-center cursor-pointer"
         :class="{
           'text-blue': tag.key !== currentTagKey,
           'bg-blue text-white fw-bold': tag.key === currentTagKey
