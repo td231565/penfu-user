@@ -102,7 +102,7 @@ export default {
           }
         ]
       },
-      qrOptions: { width: 76, margin: 0, scale: 2 }
+      qrOptions: { width: 76, margin: 0, scale: 4 }
     }
   }
 }

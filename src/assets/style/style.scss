@@ -1,6 +1,15 @@
-$product-blue: #009fe8;
+/* Base */
+* {
+  box-sizing: border-box;
+}
+ul, li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 
 /* Color */
+$product-blue: #009fe8;
 .text-blue {
   color: $product-blue !important;
 }
@@ -70,6 +79,17 @@ $product-blue: #009fe8;
   border: 1px solid $product-blue;
   border-radius: 50rem;
   cursor: pointer;
+}
+
+.divider {
+  width: 100%;
+  height: 1px;
+  border-style: solid;
+  border-width: 1px 0 0 0;
+  border-color: #aaa;
+}
+.divider-dashed {
+  border-style: dashed;
 }
 
 /* -------------- */
