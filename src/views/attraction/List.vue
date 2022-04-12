@@ -1,13 +1,13 @@
 <template>
   <div v-loading.fullscreen.lock="isLoading">
-    <header class="text-white mb-2 position-relative">
+    <header class="text-white mt-1 mb-2 position-relative">
       <img src="@/assets/image/attraction_top.jpg" alt="" class="w-100 px-3">
       <div class="position-absolute top-0 start-0 w-100 h-100 pb-3 px-4 d-flex justify-content-between align-items-end">
         <div class="text-start">
           <p class="fs-1 my-0">景點介紹</p>
           <p class="my-0">Sightseeing Introduction</p>
         </div>
-        <div class="d-flex">
+        <!-- <div class="d-flex">
           <div
             v-for="(tag, idx) in tagList"
             :key="tag.key"
@@ -17,7 +17,7 @@
               'me-2': idx !== tagList.length - 1
             }"
             @click="currentTagKey = tag.key">{{ tag.title }}</div>
-        </div>
+        </div> -->
       </div>
     </header>
     <div
@@ -50,6 +50,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+
 export default {
   name: 'AttractionList',
   data() {
@@ -72,18 +74,21 @@ export default {
     this.getList()
   },
   methods: {
-    getList(page, param) {
+    getList() {
       this.isLoading = true
-      console.log(page, param)
-      setTimeout(() => {
-        this.list = new Array(10).fill(0).map((_, idx) => ({
-          id: `attraction-${new Date().valueOf() + idx}`,
-          title: '東港鎮瀾宮',
-          desc: '今日東港鎮海東港公園一帶本有今日東港鎮海東港公園一帶本有今日東港鎮海東港公園一帶本有今日東港鎮海東港公園一帶本有',
-          image: `http://placekitten.com/200/${idx % 3 + 1}00`
+      const url = `https://pengfu-app.herokuapp.com/api/attraction/`
+      axios.get(url).then(res => {
+        // console.log(res.data)
+        this.list = res.data.attraction.map(item => ({
+          id: item.id,
+          title: item.title,
+          desc: item.subTitle,
+          image: item.listImage[0].link
         }))
         this.isLoading = false
-      }, 1000)
+      }).catch(() => {
+        this.isLoading = false
+      })
     },
     gotoDetailPage(id) {
       this.$router.push(`/attraction/detail/${id}`)

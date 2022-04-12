@@ -39,10 +39,11 @@ $product-blue: #009fe8;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
 }
 .ellipsis-2 {
   -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
 }
 
 /* Font-size */
