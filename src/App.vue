@@ -21,7 +21,7 @@ export default {
         })
       } else {
         liff.login({
-          redirectUri: 'https://e3e1-123-194-157-185.jp.ngrok.io/'
+          redirectUri: 'https://stellular-kheer-3800d2.netlify.app/'
         })
       }
     }).catch(err => {
