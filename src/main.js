@@ -5,11 +5,12 @@ import store from './store'
 import '@/assets/style/bootstrap-utilities.min.css'
 import '@/assets/style/style.scss'
 import ElementUI from 'element-ui'
+import locale from 'element-ui/lib/locale/lang/zh-TW'
 import 'element-ui/lib/theme-chalk/index.css'
 import { VueMasonryPlugin } from 'vue-masonry'
 import * as VueGoogleMaps from 'vue2-google-maps'
 
-Vue.use(ElementUI)
+Vue.use(ElementUI, { locale })
 Vue.use(VueMasonryPlugin)
 Vue.use(VueGoogleMaps, {
   load: {

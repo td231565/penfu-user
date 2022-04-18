@@ -1,12 +1,38 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/attraction/list">景點</router-link>
-    </div> -->
     <router-view/>
   </div>
 </template>
+
+<script>
+import liff from '@line/liff'
+import { mapMutations } from 'vuex'
+
+export default {
+  name: 'App',
+  created() {
+    liff.init({
+      liffId: '1657060057-zx3LN0rZ',
+      withLoginOnExternalBrowser: true
+    }).then(() => {
+      if (liff.isLoggedIn()) {
+        liff.getProfile().then(profile => {
+          this.setLineProfile(profile)
+        })
+      } else {
+        liff.login({
+          redirectUri: 'https://e3e1-123-194-157-185.jp.ngrok.io/'
+        })
+      }
+    }).catch(err => {
+      console.log(err)
+    })
+  },
+  methods: {
+    ...mapMutations(['setLineProfile'])
+  }
+}
+</script>
 
 <style lang="scss">
 * {

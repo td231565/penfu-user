@@ -5,7 +5,7 @@
       <span class="w-1-3 text-center">個人資料</span>
       <span class="w-1-3 text-end">儲存</span>
     </header>
-    <img src="http://placekitten.com/200/200" alt="" class="d-block w-25 rounded-circle mx-auto my-4">
+    <img :src="linePhotoUrl" alt="" class="d-block w-25 rounded-circle mx-auto my-4">
     <div class="p-3 rounded-3 bg-white">
       <div class="p-1 border-bottom border-blue d-flex align-items-center" style="height: 34px;">
         <span class="w-35 text-end me-5">您的姓名</span>
@@ -45,6 +45,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'ProfileDetail',
   data() {
@@ -59,6 +61,9 @@ export default {
         birthday: '1995-03-31'
       }
     }
+  },
+  computed: {
+    ...mapState(['lineUserName', 'linePhotoUrl'])
   }
 }
 </script>
