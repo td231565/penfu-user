@@ -13,7 +13,7 @@ export default {
   name: 'App',
   created() {
     if (location.search.includes('richmenu')) {
-      localStorage.setItem('url', location.href.split('?')[0])
+      localStorage.setItem('path', location.pathname)
       localStorage.setItem('redirect', '1')
     }
     liff.init({
@@ -21,13 +21,14 @@ export default {
       withLoginOnExternalBrowser: true
     }).then(() => {
       if (liff.isLoggedIn()) {
-        if (localStorage.getItem('redirect') === '1') {
-          const url = localStorage.getItem('url')
-          liff.openWindow({ url, external: true })
-          localStorage.setItem('redirect', '0')
-        }
         liff.getProfile().then(profile => {
           this.setLineProfile(profile)
+          if (localStorage.getItem('redirect') === '1') {
+            const path = localStorage.getItem('path')
+            // liff.openWindow({ url, external: true })
+            this.$router.push(path)
+            localStorage.setItem('redirect', '0')
+          }
           // 新加入的使用者導頁去填寫個人資料
           // this.userLogin(profile.userId)
         })
