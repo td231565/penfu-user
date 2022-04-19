@@ -12,7 +12,7 @@ import axios from 'axios'
 export default {
   name: 'App',
   created() {
-    localStorage.setItem('url', location.href)
+    localStorage.setItem('url', location.href.split('?')[0])
     if (location.search.includes('richmenu')) {
       localStorage.setItem('redirect', 1)
     }
