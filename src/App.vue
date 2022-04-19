@@ -7,6 +7,7 @@
 <script>
 import liff from '@line/liff'
 import { mapMutations } from 'vuex'
+import axios from 'axios'
 
 export default {
   name: 'App',
@@ -18,18 +19,32 @@ export default {
       if (liff.isLoggedIn()) {
         liff.getProfile().then(profile => {
           this.setLineProfile(profile)
+          // 新加入的使用者導頁去填寫個人資料
+          // this.userLogin(profile.userId)
         })
       } else {
-        liff.login({
-          redirectUri: 'https://stellular-kheer-3800d2.netlify.app/'
-        })
+        // 取得使用者要去的 route 讓他再回去
+        console.log(location.pathname)
+        // liff.login({
+        //   redirectUri: 'https://stellular-kheer-3800d2.netlify.app/'
+        // })
       }
     }).catch(err => {
       console.log(err)
     })
   },
   methods: {
-    ...mapMutations(['setLineProfile'])
+    ...mapMutations(['setLineProfile']),
+    userLogin(lineUid) {
+      axios.post('https://pengfu-app.herokuapp.com/api/user/getUser', {
+        line_id: lineUid
+      }).then(res => {
+        const isNew = res.data.isNew
+        if (isNew) {
+          this.$router.push({ name: 'ProfileDetail' })
+        }
+      })
+    }
   }
 }
 </script>
