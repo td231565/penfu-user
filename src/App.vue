@@ -12,19 +12,25 @@ import axios from 'axios'
 export default {
   name: 'App',
   created() {
+    localStorage.setItem('url', location.href)
     liff.init({
-      liffId: '1657060057-zx3LN0rZ',
-      withLoginOnExternalBrowser: true
+      liffId: '1657060057-zx3LN0rZ'
+      // withLoginOnExternalBrowser: true
     }).then(() => {
       if (liff.isLoggedIn()) {
         liff.getProfile().then(profile => {
           this.setLineProfile(profile)
+          const url = localStorage.getItem('url')
+          liff.openWindow({
+            url,
+            external: true
+          })
           // 新加入的使用者導頁去填寫個人資料
           // this.userLogin(profile.userId)
         })
       } else {
         // 取得使用者要去的 route 讓他再回去
-        console.log(location.pathname)
+        console.log(location)
         // liff.login({
         //   redirectUri: 'https://stellular-kheer-3800d2.netlify.app/'
         // })
