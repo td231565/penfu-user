@@ -75,17 +75,9 @@ export default {
     ...mapMutations(['setUserInfo']),
     getUserDetail() {
       this.detailData = JSON.parse(JSON.stringify(this.userInfo))
-      if (!this.detailData.name) {
-        this.detailData.name = this.lineUserName
+      if (!this.detailData.username) {
+        this.detailData.username = this.lineUserName
       }
-      // axios.post('https://pengfu-app.herokuapp.com/api/user/getUser', {
-      //   lineID
-      // }).then(res => {
-      //   this.detailData = res.data.result
-      //   if (!this.detailData.name) {
-      //     this.detailData.name = this.lineUserName
-      //   }
-      // })
     },
     updateUerDetail() {
       axios.patch('https://pengfu-app.herokuapp.com/api/user/', {
@@ -94,7 +86,8 @@ export default {
       }).then(res => {
         this.setUserInfo(res.data.result)
         this.gotoPrev()
-      }).catch(() => {
+      }).catch(err => {
+        console.log(err)
         this.$message.error('更新資料錯誤')
       })
     },
