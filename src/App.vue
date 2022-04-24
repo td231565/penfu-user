@@ -12,11 +12,10 @@ import axios from 'axios'
 export default {
   name: 'App',
   created() {
-    localStorage.setItem('path', location.pathname)
-    // if (location.search.includes('richmenu')) {
-    //   localStorage.setItem('path', location.pathname)
-    //   localStorage.setItem('redirect', '1')
-    // }
+    if (location.search.includes('richmenu')) {
+      localStorage.setItem('path', location.pathname)
+      // localStorage.setItem('redirect', '1')
+    }
     liff.init({
       liffId: '1657060057-zx3LN0rZ',
       withLoginOnExternalBrowser: true
@@ -56,7 +55,6 @@ export default {
           this.$router.push({ name: 'ProfileDetail' })
         } else {
           const path = localStorage.getItem('path')
-          console.log(path)
           if (path !== location.pathname) {
             this.$router.push(path)
           }
