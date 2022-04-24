@@ -14,7 +14,6 @@ export default {
   created() {
     if (location.search.includes('richmenu')) {
       localStorage.setItem('path', location.pathname)
-      // localStorage.setItem('redirect', '1')
     }
     liff.init({
       liffId: '1657060057-zx3LN0rZ',
@@ -23,14 +22,8 @@ export default {
       if (liff.isLoggedIn()) {
         liff.getProfile().then(profile => {
           this.setLineProfile(profile)
-          // if (localStorage.getItem('redirect') === '1') {
-          //   const path = localStorage.getItem('path')
-          //   this.$router.push(path)
-          //   localStorage.setItem('redirect', '0')
-          // }
           // 新加入的使用者導頁去填寫個人資料
-          // this.userLogin(profile.userId)
-          this.userLogin('testnew123123')
+          this.userLogin(profile.userId)
         })
       } else {
         // 取得使用者要去的 route 讓他再回去
