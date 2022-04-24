@@ -69,7 +69,7 @@ export default {
   },
   created() {
     this.prevPath = localStorage.getItem('path')
-    this.getUserDetail()
+    // this.getUserDetail()
   },
   methods: {
     ...mapMutations(['setUserInfo']),
@@ -93,6 +93,16 @@ export default {
     },
     gotoPrev() {
       this.$router.push(this.prevPath)
+    }
+  },
+  watch: {
+    userInfo: {
+      immediate: true,
+      handler(obj) {
+        if (obj.lineID) {
+          this.getUserDetail()
+        }
+      }
     }
   }
 }

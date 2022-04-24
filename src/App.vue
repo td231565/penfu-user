@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-loading.fullscreen.lock="isLoading">
     <router-view/>
   </div>
 </template>
@@ -11,6 +11,11 @@ import axios from 'axios'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      isLoading: false
+    }
+  },
   created() {
     if (location.search.includes('richmenu')) {
       localStorage.setItem('path', location.pathname)
@@ -39,6 +44,7 @@ export default {
   methods: {
     ...mapMutations(['setLineProfile', 'setUserInfo']),
     userLogin(lineID) {
+      this.isLoading = true
       axios.post('https://pengfu-app.herokuapp.com/api/user/getUser', {
         lineID
       }).then(res => {
@@ -52,8 +58,10 @@ export default {
             this.$router.push(path)
           }
         }
+        this.isLoading = false
       }).catch(() => {
         this.$message.error('取得資料錯誤')
+        this.isLoading = false
       })
     }
   }
