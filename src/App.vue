@@ -52,6 +52,8 @@ export default {
             this.$router.push(path)
           }
         }
+      }).catch(() => {
+        this.$message.error('取得資料錯誤')
       })
     }
   }

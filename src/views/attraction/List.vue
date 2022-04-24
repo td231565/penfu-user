@@ -87,6 +87,7 @@ export default {
         }))
         this.isLoading = false
       }).catch(() => {
+        this.$message.error('取得資料錯誤')
         this.isLoading = false
       })
     },

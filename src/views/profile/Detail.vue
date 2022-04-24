@@ -94,6 +94,8 @@ export default {
       }).then(res => {
         this.setUserInfo(res.data.result)
         this.gotoPrev()
+      }).catch(() => {
+        this.$message.error('更新資料錯誤')
       })
     },
     gotoPrev() {

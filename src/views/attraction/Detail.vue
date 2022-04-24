@@ -67,6 +67,7 @@ export default {
         this.$nextTick(() => { this.resizeImage() })
         this.isLoading = false
       }).catch(() => {
+        this.$message.error('取得資料錯誤')
         this.isLoading = false
       })
     },
