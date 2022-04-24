@@ -56,6 +56,7 @@ export default {
           this.$router.push({ name: 'ProfileDetail' })
         } else {
           const path = localStorage.getItem('path')
+          console.log(path)
           if (path !== location.pathname) {
             this.$router.push(path)
           }
