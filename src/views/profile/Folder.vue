@@ -85,7 +85,6 @@ export default {
   methods: {
     getList(page, param) {
       this.isLoading = true
-      console.log(page, param)
       setTimeout(() => {
         this.list = new Array(8).fill(0).map((_, idx) => ({
           id: `attraction-${new Date().valueOf() + idx}`,

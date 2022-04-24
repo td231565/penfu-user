@@ -32,7 +32,6 @@ export default {
         })
       } else {
         // 取得使用者要去的 route 讓他再回去
-        console.log(location)
         // liff.login({
         //   redirectUri: 'https://stellular-kheer-3800d2.netlify.app/'
         // })

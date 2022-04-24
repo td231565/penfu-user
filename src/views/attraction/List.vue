@@ -78,7 +78,6 @@ export default {
       this.isLoading = true
       const url = `https://pengfu-app.herokuapp.com/api/attraction/`
       axios.get(url).then(res => {
-        // console.log(res.data)
         this.list = res.data.attraction.map(item => ({
           id: item.id,
           title: item.title,

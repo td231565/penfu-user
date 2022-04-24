@@ -84,7 +84,7 @@ export default {
         lineID: this.lineUid,
         ...this.detailData
       }).then(res => {
-        this.setUserInfo(res.data.result)
+        this.setUserInfo(res.data.userInfo)
         this.gotoPrev()
       }).catch(err => {
         console.log(err)
