@@ -18,7 +18,11 @@ export default new Vuex.Store({
       state.linePhotoUrl = pictureUrl
     },
     setUserInfo(state, payload) {
-      state.userInfo = payload.map(item => item || '')
+      const result = {}
+      Object.keys(payload).forEach(key => {
+        result[key] = payload[key] || ''
+      })
+      state.userInfo = result
     }
   },
   actions: {
