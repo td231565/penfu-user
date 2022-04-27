@@ -80,14 +80,17 @@ export default {
       }
     },
     updateUerDetail() {
+      this.isLoading = true
       axios.patch('https://pengfu-app.herokuapp.com/api/user/', {
         lineID: this.lineUid,
         ...this.detailData
       }).then(res => {
         this.setUserInfo(res.data.userInfo)
         this.gotoPrev()
+        this.isLoading = false
       }).catch(err => {
         console.log(err)
+        this.isLoading = false
         this.$message.error('更新資料錯誤')
       })
     },

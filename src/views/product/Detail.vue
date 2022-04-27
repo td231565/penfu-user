@@ -69,12 +69,12 @@
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>總金額</span>
-        <span class="fw-bold">$ {{ detailData.price * purchaseData.amount }}</span>
+        <span class="fw-bold">$ {{ detailData.price * purchaseData.number }}</span>
       </div>
       <div class="my-2 p-1 d-flex justify-content-center align-items-center">
-        <i class="el-icon-remove-outline fs-1 text-blue cursor-pointer" @click="purchaseData.amount > 1 && purchaseData.amount--"></i>
-        <span class="w-45 text-center fs-5">{{ purchaseData.amount }}</span>
-        <i class="el-icon-circle-plus-outline fs-1 text-blue cursor-pointer" @click="purchaseData.amount++"></i>
+        <i class="el-icon-remove-outline fs-1 text-blue cursor-pointer" @click="purchaseData.number > 1 && purchaseData.number--"></i>
+        <span class="w-45 text-center fs-5">{{ purchaseData.number }}</span>
+        <i class="el-icon-circle-plus-outline fs-1 text-blue cursor-pointer" @click="purchaseData.number++"></i>
       </div>
       <p class="my-0 fs-7">
         <i class="el-icon-circle-check text-blue me-1"></i>
@@ -87,6 +87,8 @@
 
 <script>
 import dayjs from 'dayjs'
+import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ProductDetail',
@@ -98,10 +100,13 @@ export default {
       dialogVisible: false,
       detailData: {},
       purchaseData: {
+        productID: '',
+        ticketCategory: 'normal',
         date: '',
         time: '',
-        payway: 'cash',
-        amount: 1
+        // payway: 'cash',
+        number: 1,
+        status: 2
       },
       datePickerOptions: {
         disabledDate: this.pickerDisabledDate
@@ -109,6 +114,7 @@ export default {
     }
   },
   computed: {
+    ...mapState(['lineUid']),
     timePickerOptions() {
       if (!this.detailData.ticketStock) {
         return []
@@ -121,69 +127,39 @@ export default {
     }
   },
   created() {
-    this.pageType = this.$route.params.type
+    const { id, type } = this.$route.params
+    this.pageType = type
     this.isTicketPage = this.pageType === 'ticket'
-    this.getProductDetail()
+    this.purchaseData.productID = id
+    this.getProductDetail(id)
   },
   methods: {
-    getProductDetail() {
+    getProductDetail(id) {
       this.isLoading = true
-      setTimeout(() => {
-        this.detailData = {
-          id: 0,
-          category: '',
-          title: this.pageType === 'ticket' ? '餐宴船' : '紀念手環',
-          subtitle: '購買饗宴遊程免費升級套餐(沙拉、前菜、湯品、飲料)',
-          listImage: [
-            {
-              category: 'List',
-              name: 'cat',
-              link: `http://placekitten.com/500/300`
-            }
-          ],
-          contentImage: [
-            {
-              category: 'Content',
-              name: 'cat',
-              link: `http://placekitten.com/500/300`,
-              uuid: 123
-            },
-            {
-              category: 'Content',
-              name: 'cat',
-              link: `http://placekitten.com/500/300`,
-              uuid: 456
-            },
-            {
-              category: 'Content',
-              name: 'cat',
-              link: `http://placekitten.com/500/300`,
-              uuid: 789
-            }
-          ],
-          contentArticle: '<p>先由熱情的導覽人員帶您進行觀光遊湖，途中轉換到餐宴船上享用新鮮海味、簡餐或是下午茶，70人座豪華精緻遊艇，雙船體設計， 平穩安全行駛於水中，雙層甲板設計，空間寬敞視野更完整，全視野欣賞大鵬灣的雅緻美景，是您賞美景品佳餚的最佳選擇。</p>',
-          price: 2345,
-          ticketStock: [
-            {
-              date: '2022-03-29',
-              time: '16:30',
-              stockNumber: 40
-            },
-            {
-              date: '2022-03-29',
-              time: '10:30',
-              stockNumber: 40
-            },
-            {
-              date: '2022-03-31',
-              time: '14:30',
-              stockNumber: 40
-            }
-          ]
-        }
+      const url = `https://pengfu-app.herokuapp.com/api/product/${id}`
+      axios.get(url).then(res => {
+        this.detailData = res.data.product
         this.purchaseData.date = this.detailData.ticketStock[0].date
         this.isLoading = false
-      }, 1500)
+      }).catch(() => {
+        this.$message.error('取得資料錯誤')
+        this.isLoading = false
+      })
+    },
+    purchaseOrder() {
+      this.isLoading = true
+      const { date, time } = this.purchaseData
+      this.purchaseData.memberLineID = this.lineUid
+      this.purchaseData.validTime = `${date} ${time}:00`
+      const url = `https://pengfu-app.herokuapp.com/api/order/`
+      axios.post(url, this.purchaseData).then(res => {
+        this.detailData = res.data.product
+        this.purchaseData.date = this.detailData.ticketStock[0].date
+        this.isLoading = false
+      }).catch(() => {
+        this.$message.error('取得資料錯誤')
+        this.isLoading = false
+      })
     },
     pickerDisabledDate(date) {
       let result = true

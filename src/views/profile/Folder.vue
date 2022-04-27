@@ -16,18 +16,18 @@
         <img :src="item.image" alt="" class="rounded folder__item__image">
         <div class="ps-3">
           <p class="ellipsis-1 mt-0 mb-1 fw-bold">{{ item.title }}</p>
-          <p class="mt-0 mb-1 fs-7">使用日期 {{ item.useDate }}</p>
-          <p class="ellipsis-1 mt-0 mb-1 fs-7">{{ item.desc }}</p>
-          <p class="mt-0 mb-1 fs-7">{{ item.amount }} 張</p>
+          <p class="mt-0 mb-1 fs-7">使用日期 {{ item.validTime }}</p>
+          <p class="ellipsis-1 mt-0 mb-1 fs-7">{{ item.subtitle }}</p>
+          <p class="mt-0 mb-1 fs-7">{{ item.number }} 張</p>
           <p class="my-0 text-blue fw-bold">
             <span class="fs-7">$ </span>
-            <span>{{ item.price * item.amount }}</span>
+            <span>{{ item.price * item.number }}</span>
           </p>
         </div>
         <div
           class="btn position-absolute folder__item__label"
-          :class="isBeforeNow(item.useDate) ? 'folder__item__label--invalid' : 'folder__item__label--valid'"
-        >{{ isBeforeNow(item.useDate) ? '已過期' : '可使用' }}</div>
+          :class="isBeforeNow(item.validTime) ? 'folder__item__label--invalid' : 'folder__item__label--valid'"
+        >{{ isBeforeNow(item.validTime) ? '已過期' : '可使用' }}</div>
       </li>
     </ul>
     <!-- Modal -->
@@ -36,17 +36,17 @@
         <div class="py-3 px-4">
           <h3 class="mt-0 mb-2 text-center">鵬福旅遊 PENGFU</h3>
           <p class="my-0">遊客</p>
-          <p class="mt-0 mb-2 fw-bold">羅密歐</p>
+          <p class="mt-0 mb-2 fw-bold">{{ userInfo.usernameChinese }}</p>
           <p class="my-0">訂單狀態</p>
-          <p class="mt-0 mb-2 fw-bold">{{ selectedOrder.status ? '已付款' : '未付款' }}</p>
+          <p class="mt-0 mb-2 fw-bold">{{ getOrderStatusText(selectedOrder.status) }}</p>
           <p class="my-0">日期</p>
-          <p class="mt-0 mb-2 fw-bold">{{ selectedOrder.useDate }}</p>
+          <p class="mt-0 mb-2 fw-bold">{{ selectedOrder.validTime }}</p>
           <p class="my-0">名稱</p>
           <p class="my-0 fw-bold text-blue">{{ selectedOrder.title }}</p>
         </div>
         <hr class="divider divider-dashed my-0">
         <div class="py-3 px-4 text-center">
-          <VueQrcode :value="selectedOrder.url" :options="qrOptions" class="mt-3" />
+          <VueQrcode :value="qrcodeUrl" :options="qrOptions" class="mt-3" />
         </div>
       </div>
     </div>
@@ -56,6 +56,8 @@
 <script>
 import dayjs from 'dayjs'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
+import axios from 'axios'
+import { mapState } from 'vuex'
 
 export default {
   name: 'ProfileFolder',
@@ -74,6 +76,12 @@ export default {
       qrOptions: { width: 150, margin: 0, scale: 6 }
     }
   },
+  computed: {
+    ...mapState(['userInfo']),
+    qrcodeUrl() {
+      return `redeemApi/${this.lineUid}/${this.selectedOrder.id}`
+    }
+  },
   watch: {
     currentTagKey: {
       immediate: true,
@@ -83,39 +91,34 @@ export default {
     }
   },
   methods: {
-    getList(page, param) {
+    getList() {
       this.isLoading = true
-      setTimeout(() => {
-        this.list = new Array(8).fill(0).map((_, idx) => ({
-          id: `attraction-${new Date().valueOf() + idx}`,
-          title: this.currentTagKey === 'ticket' ? '餐宴船' : '紀念手環',
-          desc: '票券說明票券說明',
-          price: '1234',
-          amount: idx + 1,
-          image: `http://placekitten.com/${idx % 3 + 1}00/${idx % 3 + 1}00`,
-          useDate: `2022-04-0${1 + idx} 16:30`
-        }))
+      axios.get(`https://pengfu-app.herokuapp.com/api/order/${this.lineUid}`).then(res => {
+        this.list = res.data.order
         this.isLoading = false
-      }, 1000)
+      }).catch(err => {
+        console.log(err)
+        this.isLoading = false
+        this.$message.error('讀取資料錯誤')
+      })
     },
     getOrderDetail(id) {
-      if (id === this.selectedOrder.id) {
-        this.isShowModal = true
-        return
+      if (id !== this.selectedOrder.id) {
+        const orderObj = this.list.find(item => item.id === id)
+        this.selectedOrder = JSON.parse(JSON.stringify(orderObj))
+        // qrcode 用核銷 API + orderId + category 組成
       }
-      this.isLoading = true
-      setTimeout(() => {
-        this.selectedOrder = {
-          id,
-          title: this.currentTagKey === 'ticket' ? '餐宴船' : '紀念手環',
-          desc: '票券說明票券說明',
-          status: 1,
-          url: `https://www.google.com`,
-          useDate: `2022-04-01 16:30`
-        }
-        this.isShowModal = true
-        this.isLoading = false
-      }, 1000)
+      this.isShowModal = true
+    },
+    getOrderStatusText(status) {
+      const list = {
+        1: '付款成功',
+        2: '現金付款',
+        3: '核銷成功',
+        4: '取消訂單',
+        99: '錯誤'
+      }
+      return list[status]
     },
     isBeforeNow(date) {
       const now = dayjs(new Date())
