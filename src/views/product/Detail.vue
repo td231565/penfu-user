@@ -15,7 +15,7 @@
         <p class="my-0 text-blue w-45 text-end">
           <span class="fs-7 me-1">{{isTicketPage ? '單人票價' : '售價'}}</span>
           <span class="fs-7 fw-bold">$ </span>
-          <span class="fs-5 fw-bold">{{ detailData.price }}</span>
+          <span class="fs-5 fw-bold">{{ unitPrice }}</span>
         </p>
       </div>
       <div v-html="detailData.contentArticle" class="lh-base"></div>
@@ -72,7 +72,7 @@
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>總金額</span>
-        <span class="fw-bold">$ {{ totalPrice }}</span>
+        <span class="fw-bold">$ {{ unitPrice * purchaseData.number }}</span>
       </div>
       <div class="my-2 p-1 d-flex justify-content-center align-items-center">
         <i class="el-icon-remove-outline fs-1 text-blue cursor-pointer" @click="purchaseData.number > 1 && purchaseData.number--"></i>
@@ -128,13 +128,13 @@ export default {
           .map(item => item.time)
       }
     },
-    totalPrice() {
+    unitPrice() {
       if (this.pageType === 'ticket') {
         const selectedTicket = this.detailData.ticketStock
           .find(item => item.date === this.purchaseData.date && item.time === this.purchaseData.time)
-        return selectedTicket ? selectedTicket.price * this.purchaseData.number : 0
+        return selectedTicket ? selectedTicket.price : 0
       } else {
-        return this.detailData.price * this.purchaseData.number
+        return this.detailData.price
       }
     }
   },
@@ -166,9 +166,8 @@ export default {
       this.purchaseData.validTime = `${date} ${time}:00`
       const url = `https://pengfu-app.herokuapp.com/api/order/`
       axios.post(url, this.purchaseData).then(res => {
-        this.detailData = res.data.product
-        this.purchaseData.date = this.detailData.ticketStock[0].date
         this.isLoading = false
+        this.$router.push({ name: 'PaySuccess' })
       }).catch(() => {
         this.$message.error('取得資料錯誤')
         this.isLoading = false

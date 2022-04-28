@@ -12,7 +12,7 @@
         @click="currentTagKey = tag.key">{{ tag.title }}</div>
     </header>
     <div v-if="currentTagKey === 'souvenir'" class="d-flex flex-wrap justify-content-center">
-      <div v-for="(item, idx) in list" :key="item.id" class="w-45 py-2 px-1" :class="{'me-2': idx % 2 === 0}">
+      <div v-for="(item, idx) in currentList" :key="item.id" class="w-45 py-2 px-1" :class="{'me-2': idx % 2 === 0}">
         <img :src="item.listImage[0].link" alt="" class="w-100 rounded">
         <p class="ellipsis-1 mt-1 mb-2 fw-bold">{{ item.title }}</p>
         <div class="d-flex justify-content-between align-items-end">
@@ -31,7 +31,7 @@
       </div>
     </div>
     <div v-if="currentTagKey === 'ticket'" class="d-flex flex-wrap justify-content-center">
-      <div v-for="item in list" :key="item.id" class="w-90 mb-4">
+      <div v-for="item in currentList" :key="item.id" class="w-90 mb-4">
         <img :src="item.listImage[0].link" alt="" class="w-100 rounded">
         <p class="ellipsis-1 my-1 fw-bold fs-5">{{ item.title }}</p>
         <p class="ellipsis-2 my-0">{{ item.subTitle }}</p>
