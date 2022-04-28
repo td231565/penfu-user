@@ -64,6 +64,9 @@ export default {
       const url = `https://pengfu-app.herokuapp.com/api/attraction/${id}`
       axios.get(url).then(res => {
         this.detailData = res.data.attraction
+        this.detailData.contentImage.forEach((item, idx) => {
+          item.uuid = new Date().valueOf() + idx
+        })
         this.$nextTick(() => { this.resizeImage() })
         this.isLoading = false
       }).catch(() => {

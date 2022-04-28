@@ -18,7 +18,7 @@
           <span class="fs-5 fw-bold">{{ unitPrice }}</span>
         </p>
       </div>
-      <div v-html="detailData.contentArticle" class="lh-base"></div>
+      <div ref="content" v-html="detailData.contentArticle" class="lh-base"></div>
       <button class="btn rounded-3 w-100 fw-bold" @click="dialogVisible = true">
         <i class="el-icon-goods fs-1 me-2"></i>
         <span class="ls-1 fs-6">立即訂購</span>
@@ -40,17 +40,11 @@
             type="date"
             placeholder="請選擇"
             class="w-35 no-padding-right"
+            value-format="yyyy-MM-dd"
             :clearable="false" />
         </div>
         <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center">
           <span>使用時間</span>
-          <!-- <el-time-select
-            v-model="purchaseData.time"
-            format="HH:mm"
-            placeholder="請選擇"
-            class="no-padding-right"
-            style="width: 23%;"
-            :clearable="false" /> -->
           <el-select v-model="purchaseData.time" placeholder="請選擇" style="width: 29%;">
             <el-option
               v-for="(time, idx) in timePickerOptions"
@@ -83,7 +77,7 @@
         <i class="el-icon-circle-check text-blue me-1"></i>
         <span class="ls-0">本人同意以下協議《鵬福觀光遊艇有限公司規範》</span>
       </p>
-      <button class="btn ls-1 rounded-3 w-100 fs-6 mt-2">確認訂單與付款</button>
+      <button class="btn ls-1 rounded-3 w-100 fs-6 mt-2" @click="purchaseOrder">確認訂單與付款</button>
     </el-dialog>
   </div>
 </template>
@@ -91,7 +85,7 @@
 <script>
 import dayjs from 'dayjs'
 import axios from 'axios'
-import { mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 
 export default {
   name: 'ProductDetail',
@@ -101,7 +95,9 @@ export default {
       isTicketPage: true,
       isLoading: false,
       dialogVisible: false,
-      detailData: {},
+      detailData: {
+        ticketStock: []
+      },
       purchaseData: {
         productID: '',
         ticketCategory: 'normal',
@@ -119,14 +115,10 @@ export default {
   computed: {
     ...mapState(['lineUid']),
     timePickerOptions() {
-      if (!this.detailData.ticketStock) {
-        return []
-      } else {
-        const selectedDate = this.purchaseData.date
-        return this.detailData.ticketStock
-          .filter(item => item.date === selectedDate)
-          .map(item => item.time)
-      }
+      const selectedDate = this.purchaseData.date
+      return this.detailData.ticketStock
+        .filter(item => dayjs(item.date).isSame(selectedDate, 'date'))
+        .map(item => item.time)
     },
     unitPrice() {
       if (this.pageType === 'ticket') {
@@ -146,15 +138,19 @@ export default {
     this.getProductDetail(id)
   },
   methods: {
+    ...mapMutations(['setPaymentInfo']),
     getProductDetail(id) {
       this.isLoading = true
       const url = `https://pengfu-app.herokuapp.com/api/product/${id}`
       axios.get(url).then(res => {
         this.detailData = res.data.product
-        this.purchaseData.date = this.detailData.ticketStock[0].date
+        this.detailData.contentImage.forEach((item, idx) => {
+          item.uuid = new Date().valueOf() + idx
+        })
         this.$nextTick(() => { this.resizeImage() })
         this.isLoading = false
-      }).catch(() => {
+      }).catch(err => {
+        console.log(err)
         this.$message.error('取得資料錯誤')
         this.isLoading = false
       })
@@ -163,9 +159,10 @@ export default {
       this.isLoading = true
       const { date, time } = this.purchaseData
       this.purchaseData.memberLineID = this.lineUid
-      this.purchaseData.validTime = `${date} ${time}:00`
+      this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
       const url = `https://pengfu-app.herokuapp.com/api/order/`
       axios.post(url, this.purchaseData).then(res => {
+        this.setPaymentInfo(res.data)
         this.isLoading = false
         this.$router.push({ name: 'PaySuccess' })
       }).catch(() => {
@@ -174,11 +171,12 @@ export default {
       })
     },
     pickerDisabledDate(date) {
+      const today = new Date()
       let result = true
-      const dateList = this.detailData.ticketStock.filter(item => item.stockNumber > 0)
+      const dateList = this.detailData.ticketStock.filter(item => item.stock > 0)
       for (let i = 0; i < dateList.length; i++) {
         const availableDate = dayjs(dateList[i].date)
-        if (dayjs(date).isSame(availableDate, 'date')) {
+        if (dayjs(date).isSame(availableDate, 'date') && (dayjs(date).isSame(today, 'date') || dayjs(date).isAfter(today, 'date'))) {
           result = false
           break
         }
@@ -186,7 +184,7 @@ export default {
       return result
     },
     resizeImage() {
-      const images = ['content', 'contact', 'related']
+      const images = ['content']
         .reduce((all, curr) => [...all, ...this.$refs[curr].querySelectorAll('img')], [])
       images.forEach(img => {
         img.width = 0

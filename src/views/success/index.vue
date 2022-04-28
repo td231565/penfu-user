@@ -10,23 +10,23 @@
     <div class="mt-3 px-4">
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>交易序號</span>
-        <span class="fw-bold">{{ paymentData.sid }}</span>
+        <span class="fw-bold">{{ paymentInfo.id }}</span>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>商品名稱</span>
-        <span class="fw-bold">{{ paymentData.title }}</span>
+        <span class="fw-bold">{{ paymentInfo.title }}</span>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>單價</span>
-        <span class="fw-bold">$ {{ paymentData.price }}</span>
+        <span class="fw-bold">$ {{ paymentInfo.price }}</span>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>數量</span>
-        <span class="fw-bold">{{ paymentData.amount }}</span>
+        <span class="fw-bold">{{ paymentInfo.number }}</span>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center text-blue" style="height: 34px;">
         <span>總金額</span>
-        <span class="fw-bold">$ {{ paymentData.price * paymentData.amount }}</span>
+        <span class="fw-bold">$ {{ paymentInfo.price * paymentInfo.number }}</span>
       </div>
     </div>
     <div class="mt-4 px-4 d-flex justify-content-center">
@@ -37,18 +37,17 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Success',
   data() {
     return {
-      isLoading: false,
-      paymentData: {
-        title: '商品名稱',
-        price: 399,
-        amount: 2,
-        sid: 'S20221000376'
-      }
+      isLoading: false
     }
+  },
+  computed: {
+    ...mapState(['paymentInfo'])
   }
 }
 </script>

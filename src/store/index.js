@@ -8,7 +8,8 @@ export default new Vuex.Store({
     lineUid: '',
     lineUserName: '',
     linePhotoUrl: '',
-    userInfo: {}
+    userInfo: {},
+    paymentInfo: {}
   },
   mutations: {
     setLineProfile(state, payload) {
@@ -21,6 +22,9 @@ export default new Vuex.Store({
       Object.keys(payload).forEach(key => {
         state.userInfo[key] = payload[key] || ''
       })
+    },
+    setPaymentInfo(state, payload) {
+      state.paymentInfo = payload
     }
   },
   actions: {
