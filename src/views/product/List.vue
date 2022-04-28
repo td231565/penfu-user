@@ -76,6 +76,12 @@ export default {
       }
     }
   },
+  computed: {
+    currentList() {
+      const tagName = this.tagList.find(({ key }) => key === this.currentTagKey).title
+      return this.list.filter(({ category }) => category === tagName)
+    }
+  },
   methods: {
     getList(page, param) {
       this.isLoading = true

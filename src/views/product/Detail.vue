@@ -1,8 +1,11 @@
 <template>
   <div v-loading.fullscreen.lock="isLoading">
+    <div class="w-100">
+      <i class="el-icon-arrow-left fw-bold fs-3 p-3" @click="gotoList"></i>
+    </div>
     <el-carousel trigger="click" height="200px">
       <el-carousel-item v-for="item in detailData.contentImage" :key="item.uuid">
-        <img :src="item.link" alt="">
+        <img :src="item.link" alt="" width="100%">
       </el-carousel-item>
     </el-carousel>
     <div class="px-3">
@@ -69,7 +72,7 @@
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>總金額</span>
-        <span class="fw-bold">$ {{ detailData.price * purchaseData.number }}</span>
+        <span class="fw-bold">$ {{ totalPrice }}</span>
       </div>
       <div class="my-2 p-1 d-flex justify-content-center align-items-center">
         <i class="el-icon-remove-outline fs-1 text-blue cursor-pointer" @click="purchaseData.number > 1 && purchaseData.number--"></i>
@@ -124,6 +127,15 @@ export default {
           .filter(item => item.date === selectedDate)
           .map(item => item.time)
       }
+    },
+    totalPrice() {
+      if (this.pageType === 'ticket') {
+        const selectedTicket = this.detailData.ticketStock
+          .find(item => item.date === this.purchaseData.date && item.time === this.purchaseData.time)
+        return selectedTicket ? selectedTicket.price * this.purchaseData.number : 0
+      } else {
+        return this.detailData.price * this.purchaseData.number
+      }
     }
   },
   created() {
@@ -140,6 +152,7 @@ export default {
       axios.get(url).then(res => {
         this.detailData = res.data.product
         this.purchaseData.date = this.detailData.ticketStock[0].date
+        this.$nextTick(() => { this.resizeImage() })
         this.isLoading = false
       }).catch(() => {
         this.$message.error('取得資料錯誤')
@@ -172,6 +185,19 @@ export default {
         }
       }
       return result
+    },
+    resizeImage() {
+      const images = ['content', 'contact', 'related']
+        .reduce((all, curr) => [...all, ...this.$refs[curr].querySelectorAll('img')], [])
+      images.forEach(img => {
+        img.width = 0
+        img.height = 0
+        img.style.width = '100%'
+        img.style.height = 'auto'
+      })
+    },
+    gotoList() {
+      this.$router.push({ name: 'ProductList' })
     }
   }
 }
