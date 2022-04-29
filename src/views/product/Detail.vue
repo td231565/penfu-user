@@ -162,7 +162,7 @@ export default {
       this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
       const url = `https://pengfu-app.herokuapp.com/api/order/`
       axios.post(url, this.purchaseData).then(res => {
-        this.setPaymentInfo(res.data)
+        this.setPaymentInfo(res.data.order)
         this.isLoading = false
         this.$router.push({ name: 'PaySuccess' })
       }).catch(() => {

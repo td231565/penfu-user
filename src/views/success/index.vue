@@ -1,7 +1,7 @@
 <template>
   <div v-loading.fullscreen.lock="isLoading">
     <header>
-      <img src="http://placekitten.com/500/300" alt="" class="w-100">
+      <img :src="paymentInfo.imageLink" alt="" class="w-100">
     </header>
     <div class="text-center">
       <p class="fs-2 my-2">付款成功</p>
@@ -26,7 +26,7 @@
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center text-blue" style="height: 34px;">
         <span>總金額</span>
-        <span class="fw-bold">$ {{ paymentInfo.price * paymentInfo.number }}</span>
+        <span class="fw-bold">$ {{ paymentInfo.totalPrice }}</span>
       </div>
     </div>
     <div class="mt-4 px-4 d-flex justify-content-center">

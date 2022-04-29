@@ -107,7 +107,7 @@ export default {
       this.isLoading = true
       axios.get(`https://pengfu-app.herokuapp.com/api/order/${this.lineUid}`).then(res => {
         this.orders = res.data.order.map(item => {
-          item.qrcodeUrl = `核銷API+LINEID+ORDERID`
+          item.qrcodeUrl = `https://pengfu-app.herokuapp.com/api/order/${item.id}?status=3`
           return item
         })
         this.isLoading = false
