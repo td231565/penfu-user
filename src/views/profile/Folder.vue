@@ -49,7 +49,8 @@
         </div>
         <!-- <hr class="divider divider-dashed my-0"> -->
         <div class="py-3 px-4 text-center">
-          <VueQrcode :value="qrcodeUrl" :options="qrOptions" class="mt-3" />
+          <VueQrcode :value="selectedOrder.uuid" :options="qrOptions" class="mt-3" />
+          <p class="mt-1 mb-0 text-center text-break">{{ selectedOrder.uuid }}</p>
         </div>
       </div>
     </div>
@@ -81,9 +82,9 @@ export default {
   },
   computed: {
     ...mapState(['userInfo', 'lineUid']),
-    qrcodeUrl() {
-      return `https://pengfu-app.herokuapp.com/api/order/${this.selectedOrder.id}?status=3`
-    },
+    // qrcodeUrl() {
+    //   return `${this.selectedOrder.id}`
+    // },
     currentList() {
       const tagName = this.tagList.find(({ key }) => key === this.currentTagKey).category
       return this.list.filter(({ productCategory }) => productCategory === tagName)

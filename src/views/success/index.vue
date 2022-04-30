@@ -10,7 +10,7 @@
     <div class="mt-3 px-4">
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>交易序號</span>
-        <span class="fw-bold">{{ paymentInfo.id }}</span>
+        <span class="fw-bold">{{ paymentInfo.uuid }}</span>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>商品名稱</span>

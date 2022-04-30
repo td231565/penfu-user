@@ -29,7 +29,7 @@
       <!-- Tickets -->
       <div v-for="(item, idx) in orders" :key="item.id" class="ticket" :class="{'mb-3': idx !== orders.length - 1}">
         <div class="ticket__left">
-          <VueQrcode :value="item.qrcodeUrl" :options="qrOptions" style="margin-top: -3px;" />
+          <VueQrcode :value="item.uuid" :options="qrOptions" style="margin-top: -3px;" />
         </div>
         <div class="ticket__right">
           <p class="mt-1 mb-2">{{ item.title }}</p>
@@ -66,10 +66,7 @@ export default {
     getOrders() {
       this.isLoading = true
       axios.get(`https://pengfu-app.herokuapp.com/api/order/${this.lineUid}`).then(res => {
-        this.orders = res.data.order.map(item => {
-          item.qrcodeUrl = `https://pengfu-app.herokuapp.com/api/order/${item.id}?status=3`
-          return item
-        }).slice(0, 4)
+        this.orders = res.data.order.slice(0, 4)
         this.isLoading = false
       }).catch(err => {
         console.log(err)
