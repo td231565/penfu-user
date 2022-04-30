@@ -35,9 +35,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "PaySuccess" */ '../views/success/index.vue')
   },
   {
-    path: '/profile',
+    path: '/profile/index',
     name: 'Profile',
-    component: () => import(/* webpackChunkName: "Profile" */ '../views/profile/index.vue')
+    component: () => import(/* webpackChunkName: "Profile" */ '../views/profile/Profile.vue')
   },
   {
     path: '/profile/detail',

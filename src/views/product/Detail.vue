@@ -8,7 +8,7 @@
         <img :src="item.link" alt="" width="100%">
       </el-carousel-item>
     </el-carousel>
-    <div class="px-3">
+    <div class="px-3 pb-3">
       <p class="fs-5 fw-bold mt-3 mb-1">{{ detailData.title }}</p>
       <div class="d-flex justify-content-between align-items-end">
         <span class="text-blue fs-7">{{ detailData.subtitle }}</span>
@@ -59,9 +59,9 @@
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>付款方式</span>
-        <el-select v-model="purchaseData.payway" placeholder="請選擇" class="w-35 text-end">
-          <el-option label="現金/票券" value="cash" />
-          <el-option label="信用卡" value="credit" />
+        <el-select v-model="purchaseData.status" placeholder="請選擇" class="w-35 text-end">
+          <el-option label="現金/票券" :value="2" />
+          <el-option label="信用卡" :value="1" />
         </el-select>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
@@ -103,7 +103,6 @@ export default {
         ticketCategory: 'normal',
         date: '',
         time: '',
-        // payway: 'cash',
         number: 1,
         status: 2
       },

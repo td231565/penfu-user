@@ -29,14 +29,15 @@
         <span class="fw-bold">$ {{ paymentInfo.totalPrice }}</span>
       </div>
     </div>
-    <div class="mt-4 px-4 d-flex justify-content-center">
-      <button class="btn me-4 w-35 rounded-3">列印</button>
-      <button class="btn w-35 rounded-3">確認</button>
+    <div class="mt-4 px-4 pb-3 d-flex justify-content-center">
+      <!-- <button class="btn me-4 w-35 rounded-3">列印</button> -->
+      <button class="btn w-35 rounded-3" @click="gotoProfileFolder">確認</button>
     </div>
   </div>
 </template>
 
 <script>
+import liff from '@line/liff'
 import { mapState } from 'vuex'
 
 export default {
@@ -48,6 +49,14 @@ export default {
   },
   computed: {
     ...mapState(['paymentInfo'])
+  },
+  methods: {
+    closeWindow() {
+      liff.closeWindow()
+    },
+    gotoProfileFolder() {
+      this.$router.push({ name: 'ProfileFolder' })
+    }
   }
 }
 </script>

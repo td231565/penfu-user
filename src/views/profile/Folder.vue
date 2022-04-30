@@ -11,12 +11,12 @@
         }"
         @click="currentTagKey = tag.key">{{ tag.title }}</div>
     </header>
-    <ul>
-      <li v-for="item in list" :key="item.id" class="w-100 mb-3 rounded-3 bg-white d-flex folder__item" @click="getOrderDetail(item.id)">
-        <img :src="item.image" alt="" class="rounded folder__item__image">
+    <ul v-if="currentList.length > 0">
+      <li v-for="item in currentList" :key="item.id" class="w-100 mb-3 rounded-3 bg-white d-flex folder__item" @click="getOrderDetail(item.id)">
+        <img :src="item.imageLink" alt="" class="rounded folder__item__image">
         <div class="ps-3">
           <p class="ellipsis-1 mt-0 mb-1 fw-bold">{{ item.title }}</p>
-          <p class="mt-0 mb-1 fs-7">使用日期 {{ item.validTime }}</p>
+          <p v-if="currentTagKey === 'ticket'" class="mt-0 mb-1 fs-7">使用日期 {{ item.validTime.replace('T', ' ').slice(0, -3) }}</p>
           <p class="ellipsis-1 mt-0 mb-1 fs-7">{{ item.subtitle }}</p>
           <p class="mt-0 mb-1 fs-7">{{ item.number }} 張</p>
           <p class="my-0 text-blue fw-bold">
@@ -30,21 +30,24 @@
         >{{ isBeforeNow(item.validTime) ? '已過期' : '可使用' }}</div>
       </li>
     </ul>
+    <p v-else class="text-white text-center mt-5">目前沒有訂單唷</p>
     <!-- Modal -->
     <div v-if="isShowModal" class="modal" @click.self="isShowModal = false">
       <div class="modal__body">
         <div class="py-3 px-4">
-          <h3 class="mt-0 mb-2 text-center">鵬福旅遊 PENGFU</h3>
+          <h3 class="mt-0 mb-4 text-center">鵬福旅遊 PENGFU</h3>
           <p class="my-0">遊客</p>
           <p class="mt-0 mb-2 fw-bold">{{ userInfo.usernameChinese }}</p>
           <p class="my-0">訂單狀態</p>
           <p class="mt-0 mb-2 fw-bold">{{ getOrderStatusText(selectedOrder.status) }}</p>
-          <p class="my-0">日期</p>
-          <p class="mt-0 mb-2 fw-bold">{{ selectedOrder.validTime }}</p>
+          <template v-if="currentTagKey === 'ticket'">
+            <p class="my-0">日期</p>
+            <p class="mt-0 mb-2 fw-bold">{{ selectedOrder.validTime.replace('T', ' ').slice(0, -3) }}</p>
+          </template>
           <p class="my-0">名稱</p>
           <p class="my-0 fw-bold text-blue">{{ selectedOrder.title }}</p>
         </div>
-        <hr class="divider divider-dashed my-0">
+        <!-- <hr class="divider divider-dashed my-0"> -->
         <div class="py-3 px-4 text-center">
           <VueQrcode :value="qrcodeUrl" :options="qrOptions" class="mt-3" />
         </div>
@@ -67,8 +70,8 @@ export default {
       isLoading: false,
       currentTagKey: 'ticket',
       tagList: [
-        { key: 'ticket', title: '我的票券' },
-        { key: 'souvenir', title: '我的伴手禮' }
+        { key: 'ticket', title: '我的票券', category: '票券' },
+        { key: 'souvenir', title: '我的伴手禮', category: '伴手禮' }
       ],
       list: [],
       selectedOrder: {},
@@ -77,18 +80,17 @@ export default {
     }
   },
   computed: {
-    ...mapState(['userInfo']),
+    ...mapState(['userInfo', 'lineUid']),
     qrcodeUrl() {
-      return `redeemApi/${this.lineUid}/${this.selectedOrder.id}`
+      return `https://pengfu-app.herokuapp.com/api/order/${this.selectedOrder.id}?status=3`
+    },
+    currentList() {
+      const tagName = this.tagList.find(({ key }) => key === this.currentTagKey).category
+      return this.list.filter(({ productCategory }) => productCategory === tagName)
     }
   },
-  watch: {
-    currentTagKey: {
-      immediate: true,
-      handler(val) {
-        this.getList(1, val)
-      }
-    }
+  created() {
+    this.getList()
   },
   methods: {
     getList() {
@@ -106,7 +108,6 @@ export default {
       if (id !== this.selectedOrder.id) {
         const orderObj = this.list.find(item => item.id === id)
         this.selectedOrder = JSON.parse(JSON.stringify(orderObj))
-        // qrcode 用核銷 API + orderId + category 組成
       }
       this.isShowModal = true
     },
@@ -130,6 +131,7 @@ export default {
 
 <style lang="scss" scoped>
 .profile-folder {
+  min-height: 100vh;
   background-image: url(../../assets/image/bg_profile.png);
 }
 .folder {
@@ -176,7 +178,7 @@ export default {
       height: 100%;
       position: absolute;
       top: 0;
-      left: -10px;
+      left: -9px;
       background-color: #fff;
       background: radial-gradient(circle at 0 52.5%, transparent 0, transparent 9px, #fff 10px, #fff);
       border-radius: 10px 0 0 10px;
