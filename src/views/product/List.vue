@@ -11,25 +11,6 @@
         }"
         @click="currentTagKey = tag.key">{{ tag.title }}</div>
     </header>
-    <!-- <div v-if="currentTagKey === 'souvenir'" class="d-flex flex-wrap justify-content-center">
-      <div v-for="(item, idx) in currentList" :key="item.id" class="w-45 py-2 px-1" :class="{'me-2': idx % 2 === 0}">
-        <img :src="item.listImage[0].link" alt="" class="w-100 rounded">
-        <p class="ellipsis-1 mt-1 mb-2 fw-bold">{{ item.title }}</p>
-        <div class="d-flex justify-content-between align-items-end">
-          <div>
-            <p class="my-0 text-blue fw-bold">
-              <span class="fs-7">$ </span>
-              <span >{{ item.price }}</span>
-            </p>
-            <p class="my-0 fs-7 ls-0">已售出 {{ item.saleNum }}</p>
-          </div>
-          <button class="btn" @click="gotoDetailPage(item.id)">
-            <i class="el-icon-search me-1"></i>
-            <span>More</span>
-          </button>
-        </div>
-      </div>
-    </div> -->
     <div
       v-if="currentTagKey === 'souvenir'"
       class="mx-auto"
@@ -78,6 +59,7 @@
             <p class="my-0 text-blue fw-bold">
               <span class="fs-7">$ </span>
               <span class="fs-5">{{ item.price }}</span>
+              <span class="fs-7"> 起</span>
             </p>
           </div>
           <button class="btn" @click="gotoDetailPage(item.id)">

@@ -16,6 +16,7 @@
           <span class="fs-7 me-1">{{isTicketPage ? '單人票價' : '售價'}}</span>
           <span class="fs-7 fw-bold">$ </span>
           <span class="fs-5 fw-bold">{{ unitPrice }}</span>
+          <span v-if="isTicketPage" class="fs-7 fw-bold"> 起</span>
         </p>
       </div>
       <div ref="content" v-html="detailData.contentArticle" class="lh-base"></div>
