@@ -1,6 +1,6 @@
 <template>
   <div class="home" style="">
-    <el-button class="btn" @click="$router.push({name: 'AttractionList'})">
+    <!-- <el-button class="btn" @click="$router.push({name: 'AttractionList'})">
       <p>景點推薦</p>
       <p>Sightseeing</p>
     </el-button>
@@ -8,7 +8,7 @@
       <p>熱門商品</p>
       <p>Product</p>
     </el-button>
-    <el-button class="btn" @click="logout">log out</el-button>
+    <el-button class="btn" @click="logout">log out</el-button> -->
   </div>
 </template>
 
