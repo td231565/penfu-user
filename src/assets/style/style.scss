@@ -20,6 +20,20 @@ $product-blue: #009fe8;
   border-color: $product-blue !important;
 }
 
+/* Border */
+$radius4: 10px;
+.rounded-4 {
+  border-radius: $radius4;
+}
+.rounded-top-4 {
+  border-top-left-radius: $radius4 !important;
+  border-top-right-radius: $radius4 !important;
+}
+.rounded-bottom-4 {
+  border-bottom-right-radius: $radius4 !important;
+  border-bottom-left-radius: $radius4 !important;
+}
+
 /* Width */
 .w-90 {
   width: 90% !important;

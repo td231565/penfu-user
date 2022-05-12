@@ -48,6 +48,36 @@ const routes = [
     path: '/profile/folder',
     name: 'ProfileFolder',
     component: () => import(/* webpackChunkName: "ProfileFolder" */ '../views/profile/Folder.vue')
+  },
+  {
+    path: '/bike/scan',
+    name: 'BikeScan',
+    component: () => import(/* webpackChunkName: "BikeScan" */ '../views/bike/Scan.vue')
+  },
+  {
+    path: '/bike/plans/:carId',
+    name: 'BikePlans',
+    component: () => import(/* webpackChunkName: "BikePlans" */ '../views/bike/Plans.vue')
+  },
+  {
+    path: '/bike/rentSuccess',
+    name: 'BikeRentSuccess',
+    component: () => import(/* webpackChunkName: "BikeRentSuccess" */ '../views/bike/RentSuccess.vue')
+  },
+  {
+    path: '/bike/backSuccess',
+    name: 'BikeBackSuccess',
+    component: () => import(/* webpackChunkName: "BikeBackSuccess" */ '../views/bike/BackSuccess.vue')
+  },
+  {
+    path: '/bike/status/:orderId',
+    name: 'BikeStatus',
+    component: () => import(/* webpackChunkName: "BikeStatus" */ '../views/bike/Status.vue')
+  },
+  {
+    path: '/bike/back/:orderId',
+    name: 'BikeBack',
+    component: () => import(/* webpackChunkName: "BikeBack" */ '../views/bike/Back.vue')
   }
 ]
 

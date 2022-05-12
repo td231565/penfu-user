@@ -9,7 +9,8 @@ export default new Vuex.Store({
     lineUserName: '',
     linePhotoUrl: 'https://profile.line-scdn.net/ch/v2/p/ub4d009ef64a0d4b49c2e18c8ba2a7b67/1357129184973',
     userInfo: {},
-    paymentInfo: {}
+    paymentInfo: {},
+    bikeInfo: {}
   },
   mutations: {
     setLineProfile(state, payload) {
@@ -25,6 +26,9 @@ export default new Vuex.Store({
     },
     setPaymentInfo(state, payload) {
       state.paymentInfo = payload
+    },
+    setBikeInfo(state, payload) {
+      state.bikeInfo = payload
     }
   },
   actions: {
