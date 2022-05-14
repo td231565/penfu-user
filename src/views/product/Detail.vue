@@ -3,7 +3,7 @@
     <div class="w-100">
       <i class="el-icon-arrow-left fw-bold fs-3 p-3" @click="gotoList"></i>
     </div>
-    <el-carousel trigger="click" height="200px">
+    <el-carousel v-if="detailData.contentImage.length > 0" trigger="click" height="200px">
       <el-carousel-item v-for="item in detailData.contentImage" :key="item.uuid">
         <img :src="item.link" alt="" width="100%">
       </el-carousel-item>
