@@ -22,11 +22,11 @@
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>已租借時間</span>
-        <span class="fw-bold">{{ calculateTimeDiff(rentInfo.rentTime) }}</span>
+        <span class="fw-bold">{{ showDiffTime(rentInfo.diffTime) }}</span>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center text-blue" style="height: 34px;">
         <span>費用</span>
-        <span class="fw-bold">$ {{ Number(rentInfo.paymentDeposit) + Number(rentInfo.paymentCost) }}</span>
+        <span class="fw-bold">$ {{ Number(rentInfo.totalPrice) }}</span>
       </div>
     </div>
     <div class="mt-4 px-4 pb-3 d-flex justify-content-center">
@@ -41,6 +41,7 @@
 import liff from '@line/liff'
 import axios from 'axios'
 import dayjs from 'dayjs'
+import { mapState } from 'vuex'
 
 export default {
   name: 'BikeStatus',
@@ -51,6 +52,9 @@ export default {
       planInfo: {},
       orderId: 0
     }
+  },
+  computed: {
+    ...mapState(['lineUid'])
   },
   created() {
     this.orderId = this.$route.params.orderId
@@ -63,7 +67,13 @@ export default {
       axios.get(url).then(res => {
         this.rentInfo = res.data.carOrder
         const planId = this.rentInfo.planID
-        this.getPlanDetail(planId)
+        Promise.all([this.getPlanDetail(planId), this.getCalculatedPlanStatus(planId)]).then(() => {
+          this.isLoading = false
+        }).catch(err => {
+          console.log(err)
+          this.$message.error('讀取資料失敗')
+          this.isLoading = false
+        })
       }).catch(err => {
         console.log(err)
         this.$message.error('讀取資料失敗')
@@ -71,28 +81,42 @@ export default {
       })
     },
     getPlanDetail(planId) {
-      this.isLoading = true
       const url = `https://pengfu-app.herokuapp.com/api/plan/${planId}`
-      axios.get(url).then(res => {
+      return axios.get(url).then(res => {
         this.planInfo = res.data.plan
-        this.isLoading = false
       }).catch(err => {
         console.log(err)
-        this.isLoading = false
-        this.$message.error('讀取資料失敗')
+      })
+    },
+    getCalculatedPlanStatus(planId) {
+      const url = 'https://pengfu-app.herokuapp.com/api/car_order/return/calculate/'
+      const calcData = {
+        memberLineID: this.lineUid,
+        planID: planId,
+        returnTime: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss')
+      }
+      return axios.post(url, calcData).then(res => {
+        const { totalTime, totalPrice } = res.data
+        this.rentInfo.diffTime = Number(totalTime) * 60 * 1000
+        this.rentInfo.totalPrice = totalPrice
+      }).catch(err => {
+        console.log(err)
       })
     },
     calculateTimeDiff(startTime) {
       const start = dayjs(startTime)
       const now = dayjs(new Date())
       const diff = now.diff(start)
-      return dayjs(diff).format('HH:mm:ss')
+      return dayjs(diff).format('HH:mm')
+    },
+    showDiffTime(time) {
+      return dayjs(time).format('HH 小時 mm 分')
     },
     showDate(dateStr) {
       return dateStr.replace('T', ' ').slice(0, -3)
     },
     gotoBack() {
-      this.$router.push(`/bike/back/${this.orderId}`)
+      this.$router.push(`/bike/back/${this.orderId}/${this.rentInfo.writeOffCode}`)
     },
     closeWindow() {
       liff.closeWindow()

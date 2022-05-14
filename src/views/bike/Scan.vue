@@ -39,7 +39,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.checkReturnStatus(3)
+      this.checkReturnStatus(4)
     }, 1500)
   },
   methods: {

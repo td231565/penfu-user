@@ -14,13 +14,12 @@
       v-for="plan in plans"
       :key="plan.id"
       class="w-90 mx-auto overflow-hidden mb-3 p-0"
-      :style="`border-color: ${plan.color} !important`"
       @click="selectedId = plan.id"
     >
-      <div class="plan-block__top border border-2 rounded-top-4" :style="`border-color: ${plan.color} !important; background-color: ${plan.color};`">
+      <div class="border border-2 rounded-top-4" :style="`border-color: ${plan.color} !important; background-color: ${plan.color};`">
         <h2 class="text-center text-white py-2 w-100 my-0">{{ plan.title }}</h2>
       </div>
-      <div class="plan-block__bottom border border-2 rounded-bottom-4" :style="`border-color: ${plan.color} !important;`">
+      <div class="border border-2 rounded-bottom-4" :style="`border-color: ${plan.color} !important;`">
         <p class="text-center">{{ plan.description }}</p>
       </div>
     </div>
