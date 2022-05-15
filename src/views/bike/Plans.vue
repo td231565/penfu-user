@@ -48,7 +48,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations, mapState } from 'vuex'
 import axios from 'axios'
 
 export default {
@@ -56,11 +56,11 @@ export default {
   data() {
     return {
       isLoading: false,
-      plans: [],
       selectedId: 0
     }
   },
   computed: {
+    ...mapState(['lineUid', 'plans']),
     selectedPlan() {
       return this.plans.find(item => item.id === this.selectedId)
     }
@@ -69,16 +69,17 @@ export default {
     this.getAllPlans()
   },
   methods: {
-    ...mapMutations(['setBikeInfo']),
+    ...mapMutations(['setPlans']),
     getAllPlans() {
       this.isLoading = true
       const colors = ['#ee6a5a', '#AB7ECF', '#00C49B']
       const url = 'https://pengfu-app.herokuapp.com/api/plan/'
       axios.get(url).then(res => {
-        this.plans = res.data.plan.map((item, idx) => {
+        const plans = res.data.plan.map((item, idx) => {
           item.color = colors[idx]
           return item
         })
+        this.setPlans(plans)
         this.isLoading = false
       }).catch(err => {
         console.log(err)
@@ -91,8 +92,24 @@ export default {
         this.$message.error('請先選擇方案')
         return
       }
-      const plan = JSON.parse(JSON.stringify(this.selectedPlan))
-      this.setBikeInfo(plan)
+      this.isLoading = true
+      const url = 'https://pengfu-app.herokuapp.com/api/car_order/rent/'
+      const rentData = {
+        memberLineID: this.lineUid,
+        carID: this.$route.params.carId,
+        planID: this.selectedId,
+        rentLocate: '濕地',
+        paymentDeposit: this.selectedPlan.paymentDeposit,
+        paymentCost: this.selectedPlan.paymentCost
+      }
+      axios.post(url, rentData).then(res => {
+        this.isLoading = false
+        this.$router.push(`/bike/rentSuccess`)
+      }).catch(err => {
+        console.log(err)
+        this.isLoading = false
+        this.$message.error('送出訂單失敗')
+      })
     }
   }
 }

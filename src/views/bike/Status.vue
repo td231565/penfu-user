@@ -18,15 +18,15 @@
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>租借時間</span>
-        <span class="fw-bold">{{ showDate(rentInfo.rentTime) }}</span>
+        <span class="fw-bold">{{ dayjs(rentInfo.rentTime).format('YYYY-MM-DD HH:mm') }}</span>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>已租借時間</span>
-        <span class="fw-bold">{{ showDiffTime(rentInfo.diffTime) }}</span>
+        <span class="fw-bold">{{ rentInfo.hour }} 小時 {{ rentInfo.minute }} 分</span>
       </div>
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center text-blue" style="height: 34px;">
         <span>費用</span>
-        <span class="fw-bold">$ {{ Number(rentInfo.totalPrice) }}</span>
+        <span class="fw-bold">$ {{ rentInfo.totalCost }}</span>
       </div>
     </div>
     <div class="mt-4 px-4 pb-3 d-flex justify-content-center">
@@ -50,7 +50,8 @@ export default {
       isLoading: false,
       rentInfo: {},
       planInfo: {},
-      orderId: 0
+      orderId: 0,
+      dayjs: dayjs
     }
   },
   computed: {
@@ -67,7 +68,7 @@ export default {
       axios.get(url).then(res => {
         this.rentInfo = res.data.carOrder
         const planId = this.rentInfo.planID
-        Promise.all([this.getPlanDetail(planId), this.getCalculatedPlanStatus(planId)]).then(() => {
+        Promise.all([this.getPlanDetail(planId), this.getCalculatedPlanStatus()]).then(() => {
           this.isLoading = false
         }).catch(err => {
           console.log(err)
@@ -88,32 +89,16 @@ export default {
         console.log(err)
       })
     },
-    getCalculatedPlanStatus(planId) {
-      const url = 'https://pengfu-app.herokuapp.com/api/car_order/return/calculate/'
-      const calcData = {
-        memberLineID: this.lineUid,
-        planID: planId,
-        returnTime: dayjs(new Date()).format('YYYY-MM-DDTHH:mm:ss')
-      }
-      return axios.post(url, calcData).then(res => {
-        const { totalTime, totalPrice } = res.data
-        this.rentInfo.diffTime = Number(totalTime) * 60 * 1000
-        this.rentInfo.totalPrice = totalPrice
+    getCalculatedPlanStatus() {
+      const url = `https://pengfu-app.herokuapp.com/api/car_order/return/check/${this.lineUid}`
+      return axios.get(url).then(res => {
+        const { hour, minute, totalCost } = res.data.carOrder
+        this.rentInfo.hour = hour
+        this.rentInfo.minute = minute
+        this.rentInfo.totalCost = totalCost
       }).catch(err => {
         console.log(err)
       })
-    },
-    calculateTimeDiff(startTime) {
-      const start = dayjs(startTime)
-      const now = dayjs(new Date())
-      const diff = now.diff(start)
-      return dayjs(diff).format('HH:mm')
-    },
-    showDiffTime(time) {
-      return dayjs(time).format('HH 小時 mm 分')
-    },
-    showDate(dateStr) {
-      return dateStr.replace('T', ' ').slice(0, -3)
     },
     gotoBack() {
       this.$router.push(`/bike/back/${this.orderId}/${this.rentInfo.writeOffCode}`)

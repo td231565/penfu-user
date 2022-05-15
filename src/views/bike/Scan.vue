@@ -37,11 +37,6 @@ export default {
   computed: {
     ...mapState(['lineUid'])
   },
-  mounted() {
-    setTimeout(() => {
-      this.checkReturnStatus(4)
-    }, 1500)
-  },
   methods: {
     onDecode(str) {
       this.checkReturnStatus(str)
@@ -78,10 +73,11 @@ export default {
         carID
       }
       axios.post(url, checkData).then(res => {
-        const { carOrderID } = res.data
+        const orders = res.data.Orders
+        const orderId = orders && orders[0] && orders[0].id
         this.isLoading = false
-        if (carOrderID) {
-          this.gotoStatus(carOrderID)
+        if (orderId) {
+          this.gotoStatus(orderId)
         } else {
           this.gotoPlan(carID)
         }

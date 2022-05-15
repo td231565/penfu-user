@@ -10,8 +10,8 @@
     </header>
     <div class="mt-5 d-flex justify-content-center px-5">
       <div>
-        <VueQrcode :value="code" :options="qrOptions" />
-        <p class="text-center mt-2 mb-0">{{ code }}</p>
+        <VueQrcode :value="orderId" :options="qrOptions" />
+        <p class="text-center mt-2 mb-0">{{ orderId }}</p>
       </div>
     </div>
     <div class="mt-4 px-5">
