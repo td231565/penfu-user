@@ -37,6 +37,11 @@ export default {
   computed: {
     ...mapState(['lineUid'])
   },
+  created() {
+    setTimeout(() => {
+      this.checkReturnStatus(3)
+    }, 1500)
+  },
   methods: {
     onDecode(str) {
       this.checkReturnStatus(str)
@@ -70,16 +75,26 @@ export default {
       const url = 'https://pengfu-app.herokuapp.com/api/car_order/rent/check/'
       const checkData = {
         memberLineID: this.lineUid,
-        carID
+        carID: Number(carID)
       }
       axios.post(url, checkData).then(res => {
-        const orders = res.data.Orders
-        const orderId = orders && orders[0] && orders[0].id
+        let { status, Orders: orders } = res.data
+        status = Number(status)
         this.isLoading = false
-        if (orderId) {
-          this.gotoStatus(orderId)
-        } else {
-          this.gotoPlan(carID)
+        switch (Number(status)) {
+          case 1:
+            this.gotoPlan(carID)
+            break
+          case 2: {
+            const orderId = orders[0].id
+            this.gotoStatus(orderId)
+            break
+          }
+          case 3:
+            this.$message.error('車輛正被租借中')
+            break
+          default:
+            break
         }
       }).catch(err => {
         console.log(err)

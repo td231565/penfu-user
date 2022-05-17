@@ -32,40 +32,22 @@
     </ul>
     <p v-else class="text-white text-center mt-5">目前沒有訂單唷</p>
     <!-- Modal -->
-    <div v-if="isShowModal" class="modal" @click.self="isShowModal = false">
-      <div class="modal__body">
-        <div class="py-3 px-4">
-          <h3 class="mt-0 mb-4 text-center">鵬福旅遊 PENGFU</h3>
-          <p class="my-0">遊客</p>
-          <p class="mt-0 mb-2 fw-bold">{{ userInfo.usernameChinese }}</p>
-          <p class="my-0">訂單狀態</p>
-          <p class="mt-0 mb-2 fw-bold">{{ getOrderStatusText(selectedOrder.status) }}</p>
-          <template v-if="currentTagKey === 'ticket'">
-            <p class="my-0">日期</p>
-            <p class="mt-0 mb-2 fw-bold">{{ selectedOrder.validTime.replace('T', ' ').slice(0, -3) }}</p>
-          </template>
-          <p class="my-0">名稱</p>
-          <p class="my-0 fw-bold text-blue">{{ selectedOrder.title }}</p>
-        </div>
-        <!-- <hr class="divider divider-dashed my-0"> -->
-        <div class="py-3 px-4 text-center">
-          <VueQrcode :value="selectedOrder.uuid" :options="qrOptions" class="mt-3" />
-          <p class="mt-1 mb-0 text-center text-break">{{ selectedOrder.uuid }}</p>
-        </div>
-      </div>
-    </div>
+    <TicketModal
+      v-if="isShowModal"
+      :selectedOrder="selectedOrder"
+      @on-close="isShowModal = false" />
   </div>
 </template>
 
 <script>
 import dayjs from 'dayjs'
-import VueQrcode from '@chenfengyuan/vue-qrcode'
 import axios from 'axios'
 import { mapState } from 'vuex'
+import TicketModal from './components/TicketModal.vue'
 
 export default {
   name: 'ProfileFolder',
-  components: { VueQrcode },
+  components: { TicketModal },
   data() {
     return {
       isLoading: false,
@@ -76,15 +58,11 @@ export default {
       ],
       list: [],
       selectedOrder: {},
-      isShowModal: false,
-      qrOptions: { width: 150, margin: 0, scale: 6 }
+      isShowModal: false
     }
   },
   computed: {
     ...mapState(['userInfo', 'lineUid']),
-    // qrcodeUrl() {
-    //   return `${this.selectedOrder.id}`
-    // },
     currentList() {
       const tagName = this.tagList.find(({ key }) => key === this.currentTagKey).category
       return this.list.filter(({ productCategory }) => productCategory === tagName)
@@ -111,16 +89,6 @@ export default {
         this.selectedOrder = JSON.parse(JSON.stringify(orderObj))
       }
       this.isShowModal = true
-    },
-    getOrderStatusText(status) {
-      const list = {
-        1: '付款成功',
-        2: '現金付款',
-        3: '核銷成功',
-        4: '取消訂單',
-        99: '錯誤'
-      }
-      return list[status]
     },
     isBeforeNow(date) {
       const now = dayjs(new Date())
@@ -154,40 +122,6 @@ export default {
         background-color: #cdcdcd;
         border-color: #cdcdcd;
       }
-    }
-  }
-}
-.modal {
-  width: 100%;
-  height: 100vh;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: flex;
-  justify-content: center;
-  background-color: rgba(#000, 0.6);
-  &__body {
-    width: 70%;
-    height: 70%;
-    margin-top: 15%;
-    position: relative;
-    background-color: #fff;
-    &::before, &::after {
-      content: '';
-      display: block;
-      width: 10px;
-      height: 100%;
-      position: absolute;
-      top: 0;
-      left: -9px;
-      background-color: #fff;
-      background: radial-gradient(circle at 0 52.5%, transparent 0, transparent 9px, #fff 10px, #fff);
-      border-radius: 10px 0 0 10px;
-    }
-    &::after {
-      left: 100%;
-      background: radial-gradient(circle at 100% 52.5%, transparent 0, transparent 9px, #fff 10px, #fff);
-      border-radius: 0 10px 10px 0;
     }
   }
 }

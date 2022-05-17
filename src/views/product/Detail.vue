@@ -13,16 +13,20 @@
       <div class="d-flex justify-content-between align-items-end">
         <span class="text-blue fs-7">{{ detailData.subtitle }}</span>
         <p class="my-0 text-blue w-45 text-end">
+          <span v-if="isOutOfStock" class="fw-bold text-secondary me-2">補貨中</span>
           <span class="fs-7 me-1">{{isTicketPage ? '單人票價' : '售價'}}</span>
           <span class="fs-7 fw-bold">$ </span>
-          <span class="fs-5 fw-bold">{{ unitPrice }}</span>
+          <span class="fs-5 fw-bold">{{ detailData.price }}</span>
           <span v-if="isTicketPage" class="fs-7 fw-bold"> 起</span>
         </p>
       </div>
       <div ref="content" v-html="detailData.contentArticle" class="lh-base"></div>
-      <button class="btn rounded-3 w-100 fw-bold" @click="dialogVisible = true">
-        <i class="el-icon-goods fs-1 me-2"></i>
-        <span class="ls-1 fs-6">立即訂購</span>
+      <button
+        class="btn rounded-3 w-100 fw-bold"
+        :class="{'bg-secondary border-secondary cursor-not-allowed': isOutOfStock}"
+        @click="() => { if (!isOutOfStock) { dialogVisible = true } }">
+        <i v-if="!isOutOfStock" class="el-icon-goods fs-1 me-2"></i>
+        <span class="ls-1 fs-6">{{ isOutOfStock ? '售完補貨中' : '立即訂購' }}</span>
       </button>
     </div>
     <!-- 購買 -->
@@ -33,39 +37,39 @@
       :show-close="false"
       custom-class="product-purchase-dialog rounded-3">
       <template v-if="isTicketPage">
-        <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center">
+        <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
           <span>使用日期</span>
           <el-date-picker
             v-model="purchaseData.date"
             :picker-options="datePickerOptions"
             type="date"
             placeholder="請選擇"
-            class="w-35 no-padding-right"
+            class="no-padding-right"
             value-format="yyyy-MM-dd"
             :clearable="false" />
         </div>
-        <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center">
+        <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
           <span>使用時間</span>
-          <el-select v-model="purchaseData.time" placeholder="請選擇" style="width: 29%;">
+          <el-select v-model="purchaseData.time" placeholder="請選擇" class="no-padding-right">
             <el-option
               v-for="(time, idx) in timePickerOptions"
               :key="`time-${idx}`"
-              :label="time"
+              :label="`${time.split(':')[0]}:${time.split(':')[1]}`"
               :value="time" />
           </el-select>
         </div>
       </template>
-      <div v-else class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center">
-        <span>{{ detailData.title }}</span>
+      <div v-else class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
+        <span class="fw-bold fs-6">{{ detailData.title }}</span>
       </div>
-      <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center">
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>付款方式</span>
-        <el-select v-model="purchaseData.status" placeholder="請選擇" class="w-35 text-end">
+        <el-select v-model="purchaseData.status" placeholder="請選擇" class="no-padding-right">
           <el-option label="現金/票券" :value="2" />
-          <el-option label="信用卡" :value="1" />
+          <!-- <el-option label="信用卡" :value="1" /> -->
         </el-select>
       </div>
-      <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 42px;">
         <span>總金額</span>
         <span class="fw-bold">$ {{ unitPrice * purchaseData.number }}</span>
       </div>
@@ -78,7 +82,10 @@
         <i class="el-icon-circle-check text-blue me-1"></i>
         <span class="ls-0">本人同意以下協議《鵬福觀光遊艇有限公司規範》</span>
       </p>
-      <button class="btn ls-1 rounded-3 w-100 fs-6 mt-2" @click="purchaseOrder">確認訂單與付款</button>
+      <button
+        class="btn ls-1 rounded-3 w-100 fs-6 mt-2"
+        @click="purchaseOrder"
+      >確認訂單與付款</button>
     </el-dialog>
   </div>
 </template>
@@ -97,7 +104,8 @@ export default {
       isLoading: false,
       dialogVisible: false,
       detailData: {
-        ticketStock: []
+        ticketStock: [],
+        contentImage: []
       },
       purchaseData: {
         productID: '',
@@ -109,7 +117,8 @@ export default {
       },
       datePickerOptions: {
         disabledDate: this.pickerDisabledDate
-      }
+      },
+      dayjs: dayjs
     }
   },
   computed: {
@@ -128,6 +137,9 @@ export default {
       } else {
         return this.detailData.price
       }
+    },
+    isOutOfStock() {
+      return !this.isTicketPage && this.detailData.ticketStock[0] && this.detailData.ticketStock[0].stock === 0
     }
   },
   created() {
@@ -156,6 +168,12 @@ export default {
       })
     },
     purchaseOrder() {
+      const stock = this.detailData.ticketStock[0].stock
+      const purchaseNumber = this.purchaseData.number
+      if (Number(stock) < Number(purchaseNumber)) {
+        this.$message.error('您購買的數量已超過庫存量')
+        return
+      }
       this.isLoading = true
       const { date, time } = this.purchaseData
       this.purchaseData.memberLineID = this.lineUid
@@ -165,8 +183,10 @@ export default {
         this.setPaymentInfo(res.data.order)
         this.isLoading = false
         this.$router.push({ name: 'PaySuccess' })
-      }).catch(() => {
-        this.$message.error('取得資料錯誤')
+      }).catch(err => {
+        const { status } = err.response.data
+        const msg = Number(status) === 2 ? '此商品的庫存量不足' : '取得資料錯誤'
+        this.$message.error(msg)
         this.isLoading = false
       })
     },

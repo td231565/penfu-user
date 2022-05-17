@@ -121,6 +121,14 @@ $input-height: 25px;
   }
   .no-padding-right.el-input--suffix .el-input__inner {
     padding-right: 0;
+    text-align: right;
+  }
+  .no-padding-right.el-input--suffix .el-input__prefix {
+    display: none;
+  }
+  .no-padding-right.el-select .el-input__inner {
+    padding-right: 0;
+    text-align: right;
   }
   .el-input__inner {
     height: $input-height;
@@ -129,6 +137,9 @@ $input-height: 25px;
   }
   .el-input__icon {
     line-height: $input-height;
+  }
+  .el-input__suffix {
+    display: none;
   }
 }
 

@@ -99,8 +99,6 @@ export default {
     },
     currentList() {
       const tagName = this.tagList.find(({ key }) => key === this.currentTagKey).title
-      console.log(tagName)
-      console.log(this.list.filter(({ category }) => category === tagName))
       return this.list.filter(({ category }) => category === tagName)
     }
   },

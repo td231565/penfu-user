@@ -9,17 +9,17 @@
     <p class="mb-4 text-white fw-bold text-center">{{ userInfo.usernameChinese }}</p>
     <div class="p-3 rounded-3 bg-white">
       <!-- Tab -->
-      <div class="pb-3 border-bottom border-2 border-blue d-flex justify-content-center align-items-center" style="height: 34px;">
+      <div class="pb-4 border-bottom border-2 border-blue d-flex justify-content-center">
         <div class="d-flex justify-content-center align-items-center w-45 cursor-pointer" @click="gotoFolder">
-          <i class="el-icon-discount text-blue me-2"></i>
+          <i class="el-icon-discount text-blue me-2" style="transform: translateY(2px);"></i>
           <span>我的票券</span>
         </div>
         <div class="d-flex justify-content-center align-items-center w-45 cursor-pointer" @click="gotoInfo">
-          <i class="el-icon-user text-blue me-2"></i>
+          <i class="el-icon-user text-blue me-2" style="transform: translateY(2px);"></i>
           <span>會員資訊</span>
         </div>
       </div>
-      <div class="d-flex justify-content-between align-items-center my-3">
+      <div class="d-flex justify-content-between align-items-center my-4">
         <span class="fw-bold">我的訂單</span>
         <div class="d-flex align-items-center cursor-pointer" @click="gotoFolder">
           <span class="text-secondary">查看全部訂單</span>
@@ -27,17 +27,24 @@
         </div>
       </div>
       <!-- Tickets -->
-      <div v-for="(item, idx) in orders" :key="item.id" class="ticket" :class="{'mb-3': idx !== orders.length - 1}">
-        <div class="ticket__left">
-          <VueQrcode :value="item.uuid" :options="qrOptions" style="margin-top: -3px;" />
-        </div>
-        <div class="ticket__right">
-          <p class="mt-1 mb-2">{{ item.title }}</p>
-          <p class="my-0 text-blue fs-7">訂單有效</p>
-          <p v-if="item.productCategory === '票券'" class="my-0 text-secondary fs-7">有效日期 {{ item.validTime.replace('T', ' ').slice(0, -3) }}</p>
-        </div>
-      </div>
+      <ul>
+        <li v-for="(item, idx) in orders" :key="item.id" class="ticket" :class="{'mb-4': idx !== orders.length - 1}" @click="getOrderDetail(item.id)">
+          <div class="ticket__left">
+            <VueQrcode :value="item.uuid" :options="qrOptions" style="margin-top: -3px;" />
+          </div>
+          <div class="ticket__right">
+            <p class="mt-1 mb-2">{{ item.title }}</p>
+            <p class="my-0 text-blue fs-7">訂單有效</p>
+            <p v-if="item.productCategory === '票券'" class="my-0 text-secondary fs-7">有效日期 {{ item.validTime.replace('T', ' ').slice(0, -3) }}</p>
+          </div>
+        </li>
+      </ul>
     </div>
+    <!-- Modal -->
+    <TicketModal
+      v-if="isShowModal"
+      :selectedOrder="selectedOrder"
+      @on-close="isShowModal = false" />
   </div>
 </template>
 
@@ -45,14 +52,17 @@
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import { mapState } from 'vuex'
 import axios from 'axios'
+import TicketModal from './components/TicketModal.vue'
 
 export default {
   name: 'ProfileDetail',
-  components: { VueQrcode },
+  components: { VueQrcode, TicketModal },
   data() {
     return {
       isLoading: false,
       orders: [],
+      isShowModal: false,
+      selectedOrder: {},
       qrOptions: { width: 76, margin: 0, scale: 4 }
     }
   },
@@ -74,6 +84,13 @@ export default {
         this.$message.error('讀取資料錯誤')
       })
     },
+    getOrderDetail(id) {
+      if (id !== this.selectedOrder.id) {
+        const orderObj = this.orders.find(item => item.id === id)
+        this.selectedOrder = JSON.parse(JSON.stringify(orderObj))
+      }
+      this.isShowModal = true
+    },
     gotoFolder() {
       this.$router.push({ name: 'ProfileFolder' })
     },
@@ -91,12 +108,13 @@ export default {
 .h-min-100vh {
   min-height: 100vh;
 }
+$ticket-radius: 10px;
 .ticket {
   width: 100%;
   height: 96px;
   display: flex;
   border: 2px solid #ddd;
-  border-radius: 10px;
+  border-radius: $ticket-radius;
   &__left {
     width: 96px;
     height: 96px;
@@ -107,8 +125,8 @@ export default {
     &::before, &::after {
       content: '';
       display: block;
-      width: 10px;
-      height: 10px;
+      width: $ticket-radius;
+      height: $ticket-radius;
       position: absolute;
       top: -9px;
       right: -8px;

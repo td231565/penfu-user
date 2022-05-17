@@ -7,30 +7,26 @@
     </header>
     <img :src="linePhotoUrl" alt="" class="d-block w-25 rounded-circle mx-auto my-4">
     <div class="p-3 rounded-3 bg-white">
-      <div class="p-1 border-bottom border-blue d-flex align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex align-items-center">
         <span class="w-35 text-end me-5">您的姓名</span>
         <el-input v-model="detailData.usernameChinese" class="w-50" />
       </div>
-      <div class="p-1 border-bottom border-blue d-flex align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex align-items-center">
         <span class="w-35 text-end me-5">行動電話</span>
         <el-input v-model="detailData.userPhone" :maxlength="10" class="w-50" />
       </div>
-      <div class="p-1 border-bottom border-blue d-flex align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex align-items-center">
         <span class="w-35 text-end me-5">電子信箱</span>
         <el-input v-model="detailData.userEmail" class="w-50" />
       </div>
-      <!-- <div class="p-1 border-bottom border-blue d-flex align-items-center" style="height: 34px;">
-        <span class="w-35 text-end me-5">使用者帳號</span>
-        <span class="w-50 fw-bold">{{ detailData.uid }}</span>
-      </div> -->
-      <div class="p-1 border-bottom border-blue d-flex align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex align-items-center">
         <span class="w-35 text-end me-5">性別</span>
         <el-select v-model="detailData.userSex" placeholder="請選擇" class="w-50">
           <el-option label="男" value="male" />
           <el-option label="女" value="female" />
         </el-select>
       </div>
-      <div class="p-1 border-bottom border-blue d-flex align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex align-items-center">
         <span class="w-35 text-end me-5">生日</span>
         <el-date-picker
           v-model="detailData.userBirthday"
@@ -40,7 +36,7 @@
           class="w-50" />
       </div>
     </div>
-    <button class="btn rounded-3 bg-white text-blue w-25 mt-4 mx-auto" @click="updateUerDetail">儲存</button>
+    <button class="btn rounded-3 bg-white text-blue w-45 mt-5 mx-auto fs-6 py-3" @click="updateUerDetail">儲存</button>
   </div>
 </template>
 
@@ -68,7 +64,7 @@ export default {
     ...mapState(['lineUserName', 'linePhotoUrl', 'lineUid', 'userInfo'])
   },
   created() {
-    this.prevPath = localStorage.getItem('path')
+    this.prevPath = localStorage.getItem('path') || '/profile/index'
     // this.getUserDetail()
   },
   methods: {

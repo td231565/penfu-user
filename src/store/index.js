@@ -8,7 +8,7 @@ export default new Vuex.Store({
     lineUid: 'U59f9a10d5b430ae4d5f299a445b25a5c',
     lineUserName: '',
     linePhotoUrl: 'https://profile.line-scdn.net/ch/v2/p/ub4d009ef64a0d4b49c2e18c8ba2a7b67/1357129184973',
-    userInfo: {},
+    userInfo: { usernameChinese: '陳先生' },
     paymentInfo: {},
     plans: []
   },
