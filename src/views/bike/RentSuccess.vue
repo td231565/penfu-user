@@ -46,7 +46,7 @@
 <script>
 import liff from '@line/liff'
 import { mapState } from 'vuex'
-import axios from 'axios'
+import axios from '@/api'
 import dayjs from 'dayjs'
 
 export default {
@@ -68,7 +68,7 @@ export default {
   methods: {
     getRentDetail() {
       this.isLoading = true
-      const url = `https://pengfu-app.herokuapp.com/api/car_order/return/check/${this.lineUid}`
+      const url = `car_order/return/check/${this.lineUid}`
       axios.get(url).then(res => {
         this.rentInfo = res.data.carOrder
         if (this.plans.length > 0) {
@@ -85,8 +85,7 @@ export default {
     },
     getPlanDetail(planId) {
       this.isLoading = true
-      const url = `https://pengfu-app.herokuapp.com/api/plan/${planId}`
-      axios.get(url).then(res => {
+      axios.get(`plan/${planId}`).then(res => {
         this.planInfo = res.data.plan
         this.isLoading = false
       }).catch(err => {

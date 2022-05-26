@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '@/api'
 
 export default {
   name: 'AttractionList',
@@ -76,8 +76,7 @@ export default {
   methods: {
     getList() {
       this.isLoading = true
-      const url = `https://pengfu-app.herokuapp.com/api/attraction/`
-      axios.get(url).then(res => {
+      axios.get(`attraction/`).then(res => {
         this.list = res.data.attraction.map(item => {
           const imageLink = item.listImage[0].link.split('.')
           const linkPath = imageLink.reduce((all, curr, idx) => {

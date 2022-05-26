@@ -78,7 +78,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '@/api'
 
 export default {
   name: 'ProductList',
@@ -108,8 +108,7 @@ export default {
   methods: {
     getList() {
       this.isLoading = true
-      const url = `https://pengfu-app.herokuapp.com/api/product/`
-      axios.get(url).then(res => {
+      axios.get(`product/`).then(res => {
         this.list = res.data.product.map(item => {
           const imageLink = item.listImage[0].link.split('.')
           const linkPath = imageLink.reduce((all, curr, idx) => {

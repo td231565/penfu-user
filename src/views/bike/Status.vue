@@ -40,7 +40,7 @@
 
 <script>
 import liff from '@line/liff'
-import axios from 'axios'
+import axios from '@/api'
 import dayjs from 'dayjs'
 import { mapState } from 'vuex'
 
@@ -63,8 +63,7 @@ export default {
   methods: {
     getRentDetail() {
       this.isLoading = true
-      // const url = `https://pengfu-app.herokuapp.com/api/car_order/${this.orderId}`
-      const url = `https://pengfu-app.herokuapp.com/api/car_order/return/check/${this.lineUid}`
+      const url = `/car_order/return/check/${this.lineUid}`
       axios.get(url).then(res => {
         const { carOrder, status } = res.data
         if (Number(status) === 2) {
@@ -74,13 +73,6 @@ export default {
         this.rentInfo = carOrder
         const planId = this.rentInfo.planID
         this.getPlanDetail(planId)
-        // Promise.all([this.getPlanDetail(planId), this.getCalculatedPlanStatus()]).then(() => {
-        //   this.isLoading = false
-        // }).catch(err => {
-        //   console.log(err)
-        //   this.$message.error('讀取資料失敗')
-        //   this.isLoading = false
-        // })
       }).catch(err => {
         console.log(err)
         this.$message.error('讀取資料失敗')
@@ -89,24 +81,12 @@ export default {
     },
     getPlanDetail(planId) {
       this.isLoading = true
-      const url = `https://pengfu-app.herokuapp.com/api/plan/${planId}`
-      return axios.get(url).then(res => {
+      return axios.get(`/plan/${planId}`).then(res => {
         this.planInfo = res.data.plan
         this.isLoading = false
       }).catch(err => {
         console.log(err)
         this.isLoading = false
-      })
-    },
-    getCalculatedPlanStatus() {
-      const url = `https://pengfu-app.herokuapp.com/api/car_order/return/check/${this.lineUid}`
-      return axios.get(url).then(res => {
-        const { hour, minute, totalCost } = res.data.carOrder
-        this.rentInfo.hour = hour
-        this.rentInfo.minute = minute
-        this.rentInfo.totalCost = totalCost
-      }).catch(err => {
-        console.log(err)
       })
     },
     gotoBack() {

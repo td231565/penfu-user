@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '@/api'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { mapState } from 'vuex'
 
@@ -36,11 +36,6 @@ export default {
   },
   computed: {
     ...mapState(['lineUid'])
-  },
-  created() {
-    setTimeout(() => {
-      this.checkReturnStatus(3)
-    }, 1500)
   },
   methods: {
     onDecode(str) {
@@ -72,12 +67,11 @@ export default {
     },
     checkReturnStatus(carID) {
       this.isLoading = true
-      const url = 'https://pengfu-app.herokuapp.com/api/car_order/rent/check/'
       const checkData = {
         memberLineID: this.lineUid,
         carID: Number(carID)
       }
-      axios.post(url, checkData).then(res => {
+      axios.post('car_order/rent/check/', checkData).then(res => {
         let { status } = res.data
         status = Number(status)
         this.isLoading = false

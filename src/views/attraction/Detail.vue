@@ -36,7 +36,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import axios from '@/api'
 
 export default {
   name: 'AttractionDetail',
@@ -61,8 +61,7 @@ export default {
     getDetailData() {
       this.isLoading = true
       const { id } = this.$route.params
-      const url = `https://pengfu-app.herokuapp.com/api/attraction/${id}`
-      axios.get(url).then(res => {
+      axios.get(`attraction/${id}`).then(res => {
         this.detailData = res.data.attraction
         this.detailData.contentImage.forEach((item, idx) => {
           item.uuid = new Date().valueOf() + idx

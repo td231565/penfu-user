@@ -41,7 +41,7 @@
 
 <script>
 import dayjs from 'dayjs'
-import axios from 'axios'
+import axios from '@/api'
 import { mapState } from 'vuex'
 import TicketModal from './components/TicketModal.vue'
 
@@ -74,7 +74,7 @@ export default {
   methods: {
     getList() {
       this.isLoading = true
-      axios.get(`https://pengfu-app.herokuapp.com/api/order/${this.lineUid}`).then(res => {
+      axios.get(`order/${this.lineUid}`).then(res => {
         this.list = res.data.order
         this.isLoading = false
       }).catch(err => {

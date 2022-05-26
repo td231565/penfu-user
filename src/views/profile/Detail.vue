@@ -42,7 +42,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import axios from 'axios'
+import axios from '@/api'
 
 export default {
   name: 'ProfileDetail',
@@ -77,7 +77,7 @@ export default {
     },
     updateUerDetail() {
       this.isLoading = true
-      axios.patch('https://pengfu-app.herokuapp.com/api/user/', {
+      axios.patch('user/', {
         lineID: this.lineUid,
         ...this.detailData
       }).then(res => {

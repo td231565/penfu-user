@@ -100,7 +100,7 @@
 
 <script>
 import dayjs from 'dayjs'
-import axios from 'axios'
+import axios from '@/api'
 import { mapMutations, mapState } from 'vuex'
 
 export default {
@@ -164,8 +164,7 @@ export default {
     ...mapMutations(['setPaymentInfo']),
     getProductDetail(id) {
       this.isLoading = true
-      const url = `https://pengfu-app.herokuapp.com/api/product/${id}`
-      axios.get(url).then(res => {
+      axios.get(`product/${id}`).then(res => {
         this.detailData = res.data.product
         this.detailData.contentImage.forEach((item, idx) => {
           item.uuid = new Date().valueOf() + idx
@@ -189,8 +188,7 @@ export default {
       const { date, time } = this.purchaseData
       this.purchaseData.memberLineID = this.lineUid
       this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
-      const url = `https://pengfu-app.herokuapp.com/api/order/`
-      axios.post(url, this.purchaseData).then(res => {
+      axios.post(`order/`, this.purchaseData).then(res => {
         this.setPaymentInfo(res.data.order)
         this.isLoading = false
         this.$router.push({ name: 'PaySuccess' })

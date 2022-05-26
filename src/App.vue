@@ -7,7 +7,7 @@
 <script>
 import liff from '@line/liff'
 import { mapMutations } from 'vuex'
-import axios from 'axios'
+import axios from '@/api'
 
 export default {
   name: 'App',
@@ -44,7 +44,7 @@ export default {
     ...mapMutations(['setLineProfile', 'setUserInfo']),
     userLogin(lineID) {
       this.isLoading = true
-      axios.post('https://pengfu-app.herokuapp.com/api/user/getUser', {
+      axios.post('user/getUser', {
         lineID
       }).then(res => {
         const { new: isNew, result } = res.data

@@ -49,7 +49,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import axios from 'axios'
+import axios from '@/api'
 
 export default {
   name: 'BikePlans',
@@ -73,8 +73,7 @@ export default {
     getAllPlans() {
       this.isLoading = true
       const colors = ['#ee6a5a', '#AB7ECF', '#00C49B']
-      const url = 'https://pengfu-app.herokuapp.com/api/plan/'
-      axios.get(url).then(res => {
+      axios.get('plan/').then(res => {
         const plans = res.data.plan.map((item, idx) => {
           item.color = colors[idx]
           return item
@@ -93,7 +92,6 @@ export default {
         return
       }
       this.isLoading = true
-      const url = 'https://pengfu-app.herokuapp.com/api/car_order/rent/'
       const rentData = {
         memberLineID: this.lineUid,
         carID: this.$route.params.carId,
@@ -102,7 +100,7 @@ export default {
         paymentDeposit: this.selectedPlan.paymentDeposit,
         paymentCost: this.selectedPlan.paymentCost
       }
-      axios.post(url, rentData).then(res => {
+      axios.post('car_order/rent/', rentData).then(res => {
         this.isLoading = false
         this.$router.push(`/bike/rentSuccess`)
       }).catch(err => {

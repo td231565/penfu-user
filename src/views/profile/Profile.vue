@@ -51,7 +51,7 @@
 <script>
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import { mapState } from 'vuex'
-import axios from 'axios'
+import axios from '@/api'
 import TicketModal from './components/TicketModal.vue'
 
 export default {
@@ -75,7 +75,7 @@ export default {
   methods: {
     getOrders() {
       this.isLoading = true
-      axios.get(`https://pengfu-app.herokuapp.com/api/order/${this.lineUid}`).then(res => {
+      axios.get(`order/${this.lineUid}`).then(res => {
         this.orders = res.data.order.slice(0, 4)
         this.isLoading = false
       }).catch(err => {
