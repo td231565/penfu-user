@@ -7,7 +7,7 @@
       <p class="w-1-3 my-0 text-center text-white">租借狀況</p>
     </header>
     <img src="@/assets/image/rent_banner.jpg" alt="" width="100%">
-    <div class="mt-3 px-4">
+    <div v-if="rentInfo.id" class="mt-3 px-4">
       <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
         <span>租借方案</span>
         <span class="fw-bold">{{ planInfo.title }}</span>
@@ -29,10 +29,11 @@
         <span class="fw-bold">$ {{ rentInfo.totalCost }}</span>
       </div>
     </div>
+    <p v-else class="fs-3 text-center" style="margin: 3rem 0;">無租借資訊</p>
     <div class="mt-4 px-4 pb-3 d-flex justify-content-center">
       <!-- <button class="btn me-4 w-35 rounded-3">列印</button> -->
-      <button class="btn rounded-3" @click="gotoBack">歸還</button>
-      <button class="btn rounded-3 ms-4" @click="closeWindow">確認</button>
+      <button v-if="rentInfo.id" class="btn rounded-3 me-4" @click="gotoBack">歸還</button>
+      <button class="btn rounded-3" @click="closeWindow">確認</button>
     </div>
   </div>
 </template>
@@ -50,7 +51,6 @@ export default {
       isLoading: false,
       rentInfo: {},
       planInfo: {},
-      orderId: 0,
       dayjs: dayjs
     }
   },
@@ -58,23 +58,29 @@ export default {
     ...mapState(['lineUid'])
   },
   created() {
-    this.orderId = this.$route.params.orderId
     this.getRentDetail()
   },
   methods: {
     getRentDetail() {
       this.isLoading = true
-      const url = `https://pengfu-app.herokuapp.com/api/car_order/${this.orderId}`
+      // const url = `https://pengfu-app.herokuapp.com/api/car_order/${this.orderId}`
+      const url = `https://pengfu-app.herokuapp.com/api/car_order/return/check/${this.lineUid}`
       axios.get(url).then(res => {
-        this.rentInfo = res.data.carOrder
+        const { carOrder, status } = res.data
+        if (Number(status) === 2) {
+          this.isLoading = false
+          return
+        }
+        this.rentInfo = carOrder
         const planId = this.rentInfo.planID
-        Promise.all([this.getPlanDetail(planId), this.getCalculatedPlanStatus()]).then(() => {
-          this.isLoading = false
-        }).catch(err => {
-          console.log(err)
-          this.$message.error('讀取資料失敗')
-          this.isLoading = false
-        })
+        this.getPlanDetail(planId)
+        // Promise.all([this.getPlanDetail(planId), this.getCalculatedPlanStatus()]).then(() => {
+        //   this.isLoading = false
+        // }).catch(err => {
+        //   console.log(err)
+        //   this.$message.error('讀取資料失敗')
+        //   this.isLoading = false
+        // })
       }).catch(err => {
         console.log(err)
         this.$message.error('讀取資料失敗')
@@ -82,11 +88,14 @@ export default {
       })
     },
     getPlanDetail(planId) {
+      this.isLoading = true
       const url = `https://pengfu-app.herokuapp.com/api/plan/${planId}`
       return axios.get(url).then(res => {
         this.planInfo = res.data.plan
+        this.isLoading = false
       }).catch(err => {
         console.log(err)
+        this.isLoading = false
       })
     },
     getCalculatedPlanStatus() {

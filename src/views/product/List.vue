@@ -33,7 +33,7 @@
           }"
           :style="`width: ${colWidth}px`">
           <!-- block item markup -->
-          <img :src="item.listImage[0].link" alt="" class="w-100 rounded">
+          <img v-lazy="item.listImage[0].link" alt="" class="w-100 rounded">
           <p class="ellipsis-1 mt-1 mb-2 fw-bold">{{ item.title }}</p>
           <div class="d-flex justify-content-between align-items-end">
             <div>
@@ -54,7 +54,7 @@
         v-if="currentTagKey === 'ticket'"
         class="d-flex flex-wrap justify-content-center">
         <div v-for="item in currentList" :key="item.id" class="w-90 mb-4">
-          <img :src="item.listImage[0].link" alt="" class="w-100 rounded">
+          <img v-lazy="item.listImage[0].link" alt="" class="w-100 rounded">
           <p class="ellipsis-1 my-1 fw-bold fs-5">{{ item.title }}</p>
           <p class="ellipsis-2 my-0">{{ item.subTitle }}</p>
           <div class="d-flex justify-content-between align-items-end mt-2">
@@ -110,7 +110,16 @@ export default {
       this.isLoading = true
       const url = `https://pengfu-app.herokuapp.com/api/product/`
       axios.get(url).then(res => {
-        this.list = res.data.product
+        this.list = res.data.product.map(item => {
+          const imageLink = item.listImage[0].link.split('.')
+          const linkPath = imageLink.reduce((all, curr, idx) => {
+            if (idx === imageLink.length - 1) { return all }
+            return `${all}.${curr}`
+          })
+          const fileType = imageLink[imageLink.length - 1]
+          item.listImage[0].link = `${linkPath}m.${fileType}`
+          return item
+        })
         this.isLoading = false
       }).catch(() => {
         this.$message.error('取得資料錯誤')

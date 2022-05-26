@@ -63,6 +63,14 @@
         <span class="fw-bold fs-6">{{ detailData.title }}</span>
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
+        <span>訂購人姓名</span>
+        <el-input v-model="detailData.name" class="text-end" />
+      </div>
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
+        <span>電話號碼</span>
+        <el-input v-model="detailData.phonenumber" class="text-end" />
+      </div>
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>付款方式</span>
         <el-select v-model="purchaseData.status" placeholder="請選擇" class="no-padding-right">
           <el-option label="現金/票券" :value="2" />
@@ -122,7 +130,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['lineUid']),
+    ...mapState(['lineUid', 'userInfo']),
     timePickerOptions() {
       const selectedDate = this.purchaseData.date
       return this.detailData.ticketStock
@@ -142,12 +150,15 @@ export default {
       return !this.isTicketPage && this.detailData.ticketStock[0] && this.detailData.ticketStock[0].stock === 0
     }
   },
-  created() {
+  async created() {
     const { id, type } = this.$route.params
     this.pageType = type
     this.isTicketPage = this.pageType === 'ticket'
     this.purchaseData.productID = id
-    this.getProductDetail(id)
+    await this.getProductDetail(id)
+    const { usernameChinese, userPhone } = this.userInfo
+    this.purchaseData.name = usernameChinese
+    this.purchaseData.phonenumber = userPhone
   },
   methods: {
     ...mapMutations(['setPaymentInfo']),

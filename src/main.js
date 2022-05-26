@@ -9,7 +9,9 @@ import locale from 'element-ui/lib/locale/lang/zh-TW'
 import 'element-ui/lib/theme-chalk/index.css'
 import { VueMasonryPlugin } from 'vue-masonry'
 import * as VueGoogleMaps from 'vue2-google-maps'
+import VueLazyload from 'vue-lazyload'
 
+Vue.use(VueLazyload)
 Vue.use(ElementUI, { locale })
 Vue.use(VueMasonryPlugin)
 Vue.use(VueGoogleMaps, {

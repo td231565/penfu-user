@@ -78,18 +78,16 @@ export default {
         carID: Number(carID)
       }
       axios.post(url, checkData).then(res => {
-        let { status, Orders: orders } = res.data
+        let { status } = res.data
         status = Number(status)
         this.isLoading = false
         switch (Number(status)) {
           case 1:
             this.gotoPlan(carID)
             break
-          case 2: {
-            const orderId = orders[0].id
-            this.gotoStatus(orderId)
+          case 2:
+            this.gotoStatus()
             break
-          }
           case 3:
             this.$message.error('車輛正被租借中')
             break
@@ -105,8 +103,8 @@ export default {
     gotoPlan(carId) {
       this.$router.push(`/bike/plans/${carId}`)
     },
-    gotoStatus(orderId) {
-      this.$router.push(`/bike/status/${orderId}`)
+    gotoStatus() {
+      this.$router.push(`/bike/status/`)
     },
     closeWindow() {
       window.close()

@@ -41,7 +41,7 @@
         :style="`width: ${colWidth}px`"
         @click="gotoDetailPage(item.id)">
         <!-- block item markup -->
-        <img :src="item.image" class="w-100 rounded-3" alt="">
+        <img v-lazy="item.image" class="w-100 rounded-3" alt="">
         <p class="ellipsis-1 my-1">{{ item.title }}</p>
         <p class="ellipsis-2 my-0">{{ item.desc }}</p>
       </div>
@@ -78,12 +78,20 @@ export default {
       this.isLoading = true
       const url = `https://pengfu-app.herokuapp.com/api/attraction/`
       axios.get(url).then(res => {
-        this.list = res.data.attraction.map(item => ({
-          id: item.id,
-          title: item.title,
-          desc: item.subTitle,
-          image: item.listImage[0].link
-        }))
+        this.list = res.data.attraction.map(item => {
+          const imageLink = item.listImage[0].link.split('.')
+          const linkPath = imageLink.reduce((all, curr, idx) => {
+            if (idx === imageLink.length - 1) { return all }
+            return `${all}.${curr}`
+          })
+          const fileType = imageLink[imageLink.length - 1]
+          return {
+            id: item.id,
+            title: item.title,
+            desc: item.subTitle,
+            image: `${linkPath}m.${fileType}`
+          }
+        })
         this.isLoading = false
       }).catch(() => {
         this.$message.error('取得資料錯誤')
