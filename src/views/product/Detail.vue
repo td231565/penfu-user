@@ -192,20 +192,20 @@ export default {
           return
         }
       }
-      // this.isLoading = true
-      // const { date, time } = this.purchaseData
-      // this.purchaseData.memberLineID = this.lineUid
-      // this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
-      // axios.post(`order/`, this.purchaseData).then(res => {
-      //   this.setPaymentInfo(res.data.order)
-      //   this.isLoading = false
-      //   this.$router.push({ name: 'PaySuccess' })
-      // }).catch(err => {
-      //   const { status } = err.response.data
-      //   const msg = Number(status) === 2 ? '此商品的庫存量不足' : '取得資料錯誤'
-      //   this.$message.error(msg)
-      //   this.isLoading = false
-      // })
+      this.isLoading = true
+      const { date, time } = this.purchaseData
+      this.purchaseData.memberLineID = this.lineUid
+      this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
+      axios.post(`order/`, this.purchaseData).then(res => {
+        this.setPaymentInfo(res.data.order)
+        this.isLoading = false
+        this.$router.push({ name: 'PaySuccess' })
+      }).catch(err => {
+        const { status } = err.response.data
+        const msg = Number(status) === 2 ? '此商品的庫存量不足' : '取得資料錯誤'
+        this.$message.error(msg)
+        this.isLoading = false
+      })
     },
     pickerDisabledDate(date) {
       const today = new Date()
