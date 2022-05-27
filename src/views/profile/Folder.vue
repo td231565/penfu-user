@@ -75,7 +75,16 @@ export default {
     getList() {
       this.isLoading = true
       axios.get(`order/${this.lineUid}`).then(res => {
-        this.list = res.data.order
+        this.list = res.data.order.map(item => {
+          const imgLink = item.imageLink.split('.')
+          const linkPath = imgLink.reduce((all, curr, idx) => {
+            if (idx === imgLink.length - 1) { return all }
+            return `${all}.${curr}`
+          })
+          const fileType = imgLink[imgLink.length - 1]
+          item.imageLink = `${linkPath}m.${fileType}`
+          return item
+        })
         this.isLoading = false
       }).catch(err => {
         console.log(err)

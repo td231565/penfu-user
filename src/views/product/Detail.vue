@@ -64,11 +64,11 @@
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>訂購人姓名</span>
-        <el-input v-model="detailData.name" class="text-end" />
+        <el-input v-model="purchaseData.name" class="w-50 no-padding-right" placeholder="請輸入" />
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>電話號碼</span>
-        <el-input v-model="detailData.phonenumber" class="text-end" />
+        <el-input v-model="purchaseData.phonenumber" type="tel" class="w-50 no-padding-right" placeholder="請輸入" :maxlength="10" />
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>付款方式</span>
@@ -121,7 +121,9 @@ export default {
         date: '',
         time: '',
         number: 1,
-        status: 2
+        status: 2,
+        name: '',
+        phonenumber: ''
       },
       datePickerOptions: {
         disabledDate: this.pickerDisabledDate
