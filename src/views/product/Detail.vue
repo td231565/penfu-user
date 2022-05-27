@@ -186,20 +186,26 @@ export default {
         this.$message.error('您購買的數量已超過庫存量')
         return
       }
-      this.isLoading = true
-      const { date, time } = this.purchaseData
-      this.purchaseData.memberLineID = this.lineUid
-      this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
-      axios.post(`order/`, this.purchaseData).then(res => {
-        this.setPaymentInfo(res.data.order)
-        this.isLoading = false
-        this.$router.push({ name: 'PaySuccess' })
-      }).catch(err => {
-        const { status } = err.response.data
-        const msg = Number(status) === 2 ? '此商品的庫存量不足' : '取得資料錯誤'
-        this.$message.error(msg)
-        this.isLoading = false
-      })
+      for (const key in this.purchaseData) {
+        if (!this.purchaseData[key]) {
+          this.$message.error('請填寫完整資訊')
+          return
+        }
+      }
+      // this.isLoading = true
+      // const { date, time } = this.purchaseData
+      // this.purchaseData.memberLineID = this.lineUid
+      // this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
+      // axios.post(`order/`, this.purchaseData).then(res => {
+      //   this.setPaymentInfo(res.data.order)
+      //   this.isLoading = false
+      //   this.$router.push({ name: 'PaySuccess' })
+      // }).catch(err => {
+      //   const { status } = err.response.data
+      //   const msg = Number(status) === 2 ? '此商品的庫存量不足' : '取得資料錯誤'
+      //   this.$message.error(msg)
+      //   this.isLoading = false
+      // })
     },
     pickerDisabledDate(date) {
       const today = new Date()
