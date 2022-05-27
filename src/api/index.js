@@ -4,7 +4,7 @@ import { Message } from 'element-ui'
 
 // create an axios instance
 const service = axios.create({
-  baseURL: 'https://www.pengfu.online/api/', // url = base url + request url
+  baseURL: 'https://pengfu.online/api/', // url = base url + request url
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 30000 // request timeout
 })
