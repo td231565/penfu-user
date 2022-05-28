@@ -186,6 +186,13 @@ export default {
         this.$message.error('您購買的數量已超過庫存量')
         return
       }
+      const { date, time } = this.purchaseData
+      this.purchaseData.memberLineID = this.lineUid
+      this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
+      if (!this.isTicketPage) {
+        delete this.purchaseData.date
+        delete this.purchaseData.time
+      }
       for (const key in this.purchaseData) {
         if (!this.purchaseData[key]) {
           this.$message.error('請填寫完整資訊')
@@ -193,9 +200,6 @@ export default {
         }
       }
       this.isLoading = true
-      const { date, time } = this.purchaseData
-      this.purchaseData.memberLineID = this.lineUid
-      this.purchaseData.validTime = this.isTicketPage ? `${date} ${time}` : '2999-12-31 11:59:59'
       axios.post(`order/`, this.purchaseData).then(res => {
         this.setPaymentInfo(res.data.order)
         this.isLoading = false
