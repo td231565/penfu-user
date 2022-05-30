@@ -75,7 +75,7 @@ const routes = [
     component: () => import(/* webpackChunkName: "BikeStatus" */ '../views/bike/Status.vue')
   },
   {
-    path: '/bike/back/:orderId/:code',
+    path: '/bike/back/:orderId',
     name: 'BikeBack',
     component: () => import(/* webpackChunkName: "BikeBack" */ '../views/bike/Back.vue')
   }

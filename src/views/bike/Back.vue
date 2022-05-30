@@ -30,13 +30,11 @@ export default {
     return {
       isLoading: false,
       orderId: '',
-      code: '',
       qrOptions: { width: 180, margin: 0, scale: 4 }
     }
   },
   created() {
     this.orderId = this.$route.params.orderId
-    this.code = this.$route.params.code
   },
   methods: {
   }

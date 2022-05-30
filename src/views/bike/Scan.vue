@@ -16,7 +16,7 @@
       </div>
     </QrcodeStream>
     <div class="mt-5 d-flex justify-content-center">
-      <button class="btn rounded bg-white text-blue" @click="closeWindow">取消</button>
+      <button class="btn rounded bg-white text-blue fs-6" @click="closeWindow">取消</button>
     </div>
   </div>
 </template>
@@ -36,6 +36,11 @@ export default {
   },
   computed: {
     ...mapState(['lineUid'])
+  },
+  created() {
+    setTimeout(() => {
+      this.onDecode(6)
+    }, 1500)
   },
   methods: {
     onDecode(str) {

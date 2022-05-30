@@ -8,23 +8,23 @@
     </header>
     <img src="@/assets/image/rent_banner.jpg" alt="" width="100%">
     <div v-if="rentInfo.id" class="mt-3 px-4">
-      <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>租借方案</span>
         <span class="fw-bold">{{ planInfo.title }}</span>
       </div>
-      <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>交易序號</span>
-        <span class="fw-bold">{{ rentInfo.writeOffCode }}</span>
+        <span class="fw-bold">{{ rentInfo.id }}</span>
       </div>
-      <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>租借時間</span>
         <span class="fw-bold">{{ dayjs(rentInfo.rentTime).format('YYYY-MM-DD HH:mm') }}</span>
       </div>
-      <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>已租借時間</span>
         <span class="fw-bold">{{ rentInfo.hour }} 小時 {{ rentInfo.minute }} 分</span>
       </div>
-      <div class="p-1 border-bottom border-blue d-flex justify-content-between align-items-center text-blue" style="height: 34px;">
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center text-blue">
         <span>費用</span>
         <span class="fw-bold">$ {{ rentInfo.totalCost }}</span>
       </div>
@@ -32,8 +32,8 @@
     <p v-else class="fs-3 text-center" style="margin: 3rem 0;">無租借資訊</p>
     <div class="mt-4 px-4 pb-3 d-flex justify-content-center">
       <!-- <button class="btn me-4 w-35 rounded-3">列印</button> -->
-      <button v-if="rentInfo.id" class="btn rounded-3 me-4" @click="gotoBack">歸還</button>
-      <button class="btn rounded-3" @click="closeWindow">確認</button>
+      <button v-if="rentInfo.id" class="btn rounded-3 me-4 fs-6" @click="gotoBack">歸還</button>
+      <button class="btn rounded-3 fs-6" @click="closeWindow">確認</button>
     </div>
   </div>
 </template>
@@ -90,7 +90,7 @@ export default {
       })
     },
     gotoBack() {
-      this.$router.push(`/bike/back/${this.orderId}/${this.rentInfo.writeOffCode}`)
+      this.$router.push(`/bike/back/${this.rentInfo.id}`)
     },
     closeWindow() {
       liff.closeWindow()

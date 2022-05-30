@@ -40,9 +40,9 @@
     </div>
     <div class="mt-5 d-flex justify-content-center">
       <router-link to="/bike/scan" class="text-decoration-none">
-        <button class="btn rounded bg-white text-blue">取消</button>
+        <button class="btn rounded bg-white text-blue fs-6">取消</button>
       </router-link>
-      <button class="btn rounded ms-4" @click="submit">確定</button>
+      <button class="btn rounded ms-4 fs-6" @click="submit">確定</button>
     </div>
   </div>
 </template>

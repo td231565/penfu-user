@@ -35,8 +35,9 @@
             </div>
           </div>
         </div>
-        <div class="py-3 px-4 text-center">
-          <VueQrcode :value="selectedOrder.uuid" :options="qrOptions" class="mt-3" />
+        <div class="py-3 px-4 text-center mt-3">
+          <p v-if="[3, 4].includes(selectedOrder.status)" class="mt-0 mb-1 text-center text-danger fw-bold">{{ selectedOrder.status === 3 ? '已核銷' : '已取消' }}</p>
+          <VueQrcode :value="selectedOrder.uuid" :options="qrOptions" />
           <p class="mt-1 mb-0 text-center text-break">{{ selectedOrder.uuid }}</p>
         </div>
       </div>

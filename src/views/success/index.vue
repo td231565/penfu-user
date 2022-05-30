@@ -31,7 +31,7 @@
     </div>
     <div class="mt-5 px-4 pt-3 pb-3 d-flex justify-content-center">
       <!-- <button class="btn me-4 w-35 rounded-3">列印</button> -->
-      <button class="btn w-45 rounded-3 py-3" @click="gotoProfileFolder">確認</button>
+      <button class="btn w-45 rounded-3 py-3 fs-6" @click="gotoProfileFolder">確認</button>
     </div>
   </div>
 </template>

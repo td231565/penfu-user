@@ -76,12 +76,21 @@ export default {
       }
     },
     updateUerDetail() {
+      const { usernameChinese, userPhone } = this.detailData
+      if (!usernameChinese || !userPhone) {
+        this.$message.error('姓名及行動電話為必填')
+        return
+      }
+      if (!this.validateMobile(userPhone)) {
+        return
+      }
       this.isLoading = true
       axios.patch('user/', {
         lineID: this.lineUid,
         ...this.detailData
       }).then(res => {
         this.setUserInfo(res.data.userInfo)
+        this.$message({ type: 'success', message: '個人資料更新成功' })
         this.gotoPrev()
         this.isLoading = false
       }).catch(err => {
@@ -92,6 +101,13 @@ export default {
     },
     gotoPrev() {
       this.$router.push(this.prevPath)
+    },
+    validateMobile(str) {
+      const isValid = /^09[0-9]{8}$/.test(str)
+      if (!isValid) {
+        this.$message.error('手機號碼格式錯誤')
+      }
+      return isValid
     }
   },
   watch: {

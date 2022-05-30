@@ -67,7 +67,7 @@
         <el-input v-model="purchaseData.name" class="w-50 no-padding-right" placeholder="請輸入" />
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
-        <span>電話號碼</span>
+        <span>行動電話</span>
         <el-input v-model="purchaseData.phonenumber" type="tel" class="w-50 no-padding-right" placeholder="請輸入" :maxlength="10" />
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
@@ -199,6 +199,10 @@ export default {
           return
         }
       }
+      if (!this.validateMobile(this.purchaseData.phonenumber)) {
+        this.$message.error('手機號碼格式錯誤')
+        return
+      }
       this.isLoading = true
       axios.post(`order/`, this.purchaseData).then(res => {
         this.setPaymentInfo(res.data.order)
@@ -236,6 +240,13 @@ export default {
     },
     gotoList() {
       this.$router.push({ name: 'ProductList' })
+    },
+    validateMobile(str) {
+      const isValid = /^09[0-9]{8}$/.test(str)
+      if (!isValid) {
+        this.$message.error('手機號碼格式錯誤')
+      }
+      return isValid
     }
   }
 }
