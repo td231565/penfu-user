@@ -1,12 +1,12 @@
 <template>
   <div v-loading.fullscreen.lock="isLoading">
-    <header class="bg-blue d-flex align-items-center p-2">
+    <header class="bg-blue d-flex align-items-center p-3">
       <div class="w-1-3">
         <!-- <router-link to="/">
           <i class="el-icon-arrow-left text-white"></i>
         </router-link> -->
       </div>
-      <p class="w-1-3 my-0 text-center text-white">掃碼輸入</p>
+      <p class="w-1-3 my-0 text-center text-white fs-5">掃碼輸入</p>
     </header>
     <QrcodeStream @decode="onDecode" @init="handlerQrcodeInit">
       <div class="position-relative w-100 h-100">

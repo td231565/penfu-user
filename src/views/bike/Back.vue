@@ -1,12 +1,12 @@
 <template>
   <div v-loading.fullscreen.lock="isLoading">
-    <header class="bg-blue d-flex align-items-center p-2">
+    <header class="bg-blue d-flex align-items-center p-3">
       <div class="w-1-3">
         <router-link :to="`/bike/status/${orderId}`">
-          <i class="el-icon-arrow-left text-white"></i>
+          <i class="el-icon-arrow-left text-white fs-5"></i>
         </router-link>
       </div>
-      <p class="w-1-3 my-0 text-center text-white">歸還</p>
+      <p class="w-1-3 my-0 text-center text-white fs-5">歸還</p>
     </header>
     <div class="mt-5 d-flex justify-content-center px-5">
       <div>

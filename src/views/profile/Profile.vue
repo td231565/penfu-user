@@ -2,8 +2,8 @@
   <div class="profile-bg h-min-100vh p-3" v-loading.fullscreen.lock="isLoading">
     <header class="d-flex align-items-center">
       <span class="w-1-3"></span>
-      <span class="text-white fw-bold w-1-3 text-center">個人中心</span>
-      <i class="el-icon-s-tools text-white fs-4 w-1-3 text-end"></i>
+      <span class="text-white fw-bold w-1-3 text-center fs-5">個人中心</span>
+      <i class="el-icon-s-tools text-white fs-4 w-1-3 text-end fs-5"></i>
     </header>
     <img :src="linePhotoUrl" alt="" class="d-block w-25 rounded-circle mx-auto mt-4 mb-2">
     <p class="mb-4 text-white fw-bold text-center">{{ userInfo.usernameChinese }}</p>

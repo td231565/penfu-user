@@ -1,10 +1,10 @@
 <template>
   <div v-loading.fullscreen.lock="isLoading">
-    <header class="bg-blue d-flex align-items-center p-2">
+    <header class="bg-blue d-flex align-items-center p-3">
       <div class="w-1-3">
-        <i class="el-icon-close text-white" @click="closeWindow"></i>
+        <i class="el-icon-close text-white fs-5" @click="closeWindow"></i>
       </div>
-      <p class="w-1-3 my-0 text-center text-white">歸還成功</p>
+      <p class="w-1-3 my-0 text-center text-white fs-5">歸還成功</p>
     </header>
     <div class="text-center">
       <p class="fs-2 my-2">歸還成功</p>

@@ -1,12 +1,12 @@
 <template>
   <div v-loading.fullscreen.lock="isLoading">
-    <header class="bg-blue d-flex align-items-center p-2">
+    <header class="bg-blue d-flex align-items-center p-3">
       <div class="w-1-3">
         <router-link to="/bike/scan">
-          <i class="el-icon-arrow-left text-white"></i>
+          <i class="el-icon-arrow-left text-white fs-5"></i>
         </router-link>
       </div>
-      <p class="w-1-3 my-0 text-center text-white">方案選擇</p>
+      <p class="w-1-3 my-0 text-center text-white fs-5">方案選擇</p>
     </header>
     <p class="fs-2 mb-1 text-center text-blue">請選擇租借方案</p>
     <p class="mt-1 text-center text-blue">Select Your Plan</p>

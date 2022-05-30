@@ -1,9 +1,9 @@
 <template>
   <div class="profile-detail h-min-100vh p-3" v-loading.fullscreen.lock="isLoading">
     <header class="d-flex justify-content-between align-items-center text-white fw-bold">
-      <i class="el-icon-arrow-left fw-bold w-1-3 text-start" @click="gotoPrev"></i>
-      <span class="w-1-3 text-center">個人資料</span>
-      <span class="w-1-3 text-end" @click="updateUerDetail">儲存</span>
+      <i class="el-icon-arrow-left fw-bold w-1-3 text-start fs-5" @click="gotoPrev"></i>
+      <span class="w-1-3 text-center fs-5">個人資料</span>
+      <span class="w-1-3 text-end fs-5" @click="updateUerDetail">儲存</span>
     </header>
     <img :src="linePhotoUrl" alt="" class="d-block w-25 rounded-circle mx-auto my-4">
     <div class="p-3 rounded-3 bg-white">
