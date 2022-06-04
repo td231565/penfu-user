@@ -71,6 +71,10 @@
         <el-input v-model="purchaseData.phonenumber" type="tel" class="w-50 no-padding-right" placeholder="請輸入" :maxlength="10" />
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
+        <span>備註</span>
+        <el-input v-model="purchaseData.comment" type="tel" class="w-50 no-padding-right" placeholder="請輸入" />
+      </div>
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>付款方式</span>
         <el-select v-model="purchaseData.status" placeholder="請選擇" class="no-padding-right">
           <el-option label="現金/票券" :value="2" />
@@ -123,7 +127,8 @@ export default {
         number: 1,
         status: 2,
         name: '',
-        phonenumber: ''
+        phonenumber: '',
+        comment: ''
       },
       datePickerOptions: {
         disabledDate: this.pickerDisabledDate
