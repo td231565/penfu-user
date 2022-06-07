@@ -55,12 +55,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "BikeScan" */ '../views/bike/Scan.vue')
   },
   {
-    path: '/bike/plans/:carId',
+    path: '/bike/plans/:carId/:planId',
     name: 'BikePlans',
     component: () => import(/* webpackChunkName: "BikePlans" */ '../views/bike/Plans.vue')
   },
   {
-    path: '/bike/rentSuccess',
+    path: '/bike/rentSuccess/:orderId',
     name: 'BikeRentSuccess',
     component: () => import(/* webpackChunkName: "BikeRentSuccess" */ '../views/bike/RentSuccess.vue')
   },
@@ -70,7 +70,12 @@ const routes = [
     component: () => import(/* webpackChunkName: "BikeBackSuccess" */ '../views/bike/BackSuccess.vue')
   },
   {
-    path: '/bike/status',
+    path: '/bike/status/list',
+    name: 'BikeOrderList',
+    component: () => import(/* webpackChunkName: "BikeOrderList" */ '../views/bike/OrderList.vue')
+  },
+  {
+    path: '/bike/status/:orderId',
     name: 'BikeStatus',
     component: () => import(/* webpackChunkName: "BikeStatus" */ '../views/bike/Status.vue')
   },

@@ -137,7 +137,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['lineUid', 'userInfo']),
+    ...mapState(['lineUid', 'userInfo', 'lineUserName']),
     timePickerOptions() {
       const selectedDate = this.purchaseData.date
       return this.detailData.ticketStock
@@ -163,8 +163,8 @@ export default {
     this.isTicketPage = this.pageType === 'ticket'
     this.purchaseData.productID = id
     await this.getProductDetail(id)
-    const { usernameChinese, userPhone } = this.userInfo
-    this.purchaseData.name = usernameChinese
+    const { userPhone } = this.userInfo
+    this.purchaseData.name = this.lineUserName
     this.purchaseData.phonenumber = userPhone
   },
   methods: {

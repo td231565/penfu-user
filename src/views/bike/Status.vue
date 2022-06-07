@@ -63,7 +63,8 @@ export default {
   methods: {
     getRentDetail() {
       this.isLoading = true
-      const url = `/car_order/return/check/${this.lineUid}`
+      const { orderId } = this.$route.params
+      const url = `/car_order/return/check/content/${orderId}`
       axios.get(url).then(res => {
         const { carOrder, status } = res.data
         if (Number(status) === 2) {

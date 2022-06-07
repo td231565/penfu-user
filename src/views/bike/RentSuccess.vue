@@ -4,10 +4,10 @@
       <div class="w-1-3">
         <i class="el-icon-close text-white fs-5" @click="closeWindow"></i>
       </div>
-      <p class="w-1-3 my-0 text-center text-white fs-5">租借成功</p>
+      <!-- <p class="w-1-3 my-0 text-center text-white fs-5">租借成功</p> -->
     </header>
     <div class="text-center">
-      <p class="fs-2 my-2">租借成功</p>
+      <p class="fs-2 my-3">租借成功</p>
       <i class="el-icon-circle-check text-blue fw-bold" style="font-size: 88px;"></i>
     </div>
     <div class="mt-3 px-4">
@@ -27,13 +27,13 @@
         <span>租借費用</span>
         <span class="fw-bold">$ {{ rentInfo.paymentCost }}</span>
       </div>
-      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center text-blue">
+      <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>租借押金</span>
         <span class="fw-bold">$ {{ rentInfo.paymentDeposit }}</span>
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center text-blue">
-        <span class="text-blue">總價</span>
-        <span class="fw-bold text-blue">$ {{ rentInfo.paymentCost + rentInfo.paymentDeposit }}</span>
+        <span>總價</span>
+        <span class="fw-bold">$ {{ rentInfo.paymentTotal }}</span>
       </div>
     </div>
     <div class="mt-4 px-4 pb-3 d-flex justify-content-center">
@@ -68,7 +68,8 @@ export default {
   methods: {
     getRentDetail() {
       this.isLoading = true
-      const url = `car_order/return/check/${this.lineUid}`
+      const { orderId } = this.$route.params
+      const url = `car_order/return/check/content/${orderId}`
       axios.get(url).then(res => {
         this.rentInfo = res.data.carOrder
         if (this.plans.length > 0) {

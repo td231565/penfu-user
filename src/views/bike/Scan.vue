@@ -37,11 +37,6 @@ export default {
   computed: {
     ...mapState(['lineUid'])
   },
-  created() {
-    setTimeout(() => {
-      this.onDecode(6)
-    }, 1500)
-  },
   methods: {
     onDecode(str) {
       this.checkReturnStatus(str)
@@ -77,15 +72,15 @@ export default {
         carID: Number(carID)
       }
       axios.post('car_order/rent/check/', checkData).then(res => {
-        let { status } = res.data
-        status = Number(status)
+        const { status, carOrderID, category } = res.data
+        const rentStatus = Number(status)
         this.isLoading = false
-        switch (Number(status)) {
+        switch (rentStatus) {
           case 1:
-            this.gotoPlan(carID)
+            this.gotoPlan(carID, category)
             break
           case 2:
-            this.gotoStatus()
+            this.gotoStatus(carOrderID)
             break
           case 3:
             this.$message.error('車輛正被租借中')
@@ -99,11 +94,11 @@ export default {
         this.$message.error('讀取資料失敗')
       })
     },
-    gotoPlan(carId) {
-      this.$router.push(`/bike/plans/${carId}`)
+    gotoPlan(carId, planId) {
+      this.$router.push(`/bike/plans/${carId}/${planId}`)
     },
-    gotoStatus() {
-      this.$router.push(`/bike/status/`)
+    gotoStatus(orderId) {
+      this.$router.push(`/bike/status/${orderId}`)
     },
     closeWindow() {
       window.close()
