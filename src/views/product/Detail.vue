@@ -72,7 +72,7 @@
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>備註</span>
-        <el-input v-model="purchaseData.comment" type="tel" class="w-50 no-padding-right" placeholder="請輸入" />
+        <el-input v-model="purchaseData.comment" class="w-50 no-padding-right" placeholder="請輸入" />
       </div>
       <div class="p-2 border-bottom border-blue d-flex justify-content-between align-items-center">
         <span>付款方式</span>

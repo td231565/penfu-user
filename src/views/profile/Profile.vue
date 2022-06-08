@@ -27,7 +27,7 @@
         </div>
       </div>
       <!-- Tickets -->
-      <ul>
+      <ul v-if="orders.length">
         <li v-for="(item, idx) in orders" :key="item.id" class="ticket" :class="{'mb-4': idx !== orders.length - 1}" @click="getOrderDetail(item.id)">
           <div class="ticket__left">
             <VueQrcode :value="item.uuid" :options="qrOptions" style="margin-top: -3px;" />
@@ -39,6 +39,10 @@
           </div>
         </li>
       </ul>
+      <div v-else class="my-5">
+        <p class="text-secondary fs-5 text-center mb-2">無有效訂單</p>
+        <button class="btn rounded-3 fs-6 mx-auto bg-light text-blue" @click="$router.push('/product/list')">快去看看</button>
+      </div>
     </div>
     <!-- Modal -->
     <TicketModal
@@ -49,6 +53,7 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
 import { mapState } from 'vuex'
 import axios from '@/api'
@@ -75,8 +80,9 @@ export default {
   methods: {
     getOrders() {
       this.isLoading = true
+      const now = dayjs(new Date())
       axios.get(`order/${this.lineUid}`).then(res => {
-        this.orders = res.data.order.slice(0, 4)
+        this.orders = res.data.order.filter(item => item.status === 1 && !dayjs(item.validTime).isBefore(now))
         this.isLoading = false
       }).catch(err => {
         console.log(err)

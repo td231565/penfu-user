@@ -26,8 +26,8 @@
         </div>
         <div
           class="btn position-absolute folder__item__label"
-          :class="isBeforeNow(item.validTime) ? 'folder__item__label--invalid' : 'folder__item__label--valid'"
-        >{{ isBeforeNow(item.validTime) ? '已過期' : '可使用' }}</div>
+          :class="item.sClass"
+        >{{ item.sText }}</div>
       </li>
     </ul>
     <p v-else class="text-white text-center mt-5">目前沒有訂單唷</p>
@@ -74,15 +74,25 @@ export default {
   methods: {
     getList() {
       this.isLoading = true
+      const now = dayjs(new Date())
+      const sList = [
+        { key: 101, text: '已過期', isValid: false },
+        { key: 1, text: '可使用', isValid: true },
+        { key: 2, text: '確認中', isValid: false },
+        { key: 3, text: '完成訂單', isValid: false },
+        { key: 4, text: '取消訂單', isValid: false },
+        { key: 99, text: '無效訂單', isValid: false }
+      ]
       axios.get(`order/${this.lineUid}`).then(res => {
         this.list = res.data.order.map(item => {
-          const imgLink = item.imageLink.split('.')
-          const linkPath = imgLink.reduce((all, curr, idx) => {
-            if (idx === imgLink.length - 1) { return all }
-            return `${all}.${curr}`
-          })
-          const fileType = imgLink[imgLink.length - 1]
-          item.imageLink = `${linkPath}m.${fileType}`
+          const { imageLink, status: s, validTime } = item
+          item.imageLink = this.convertImageLink(imageLink)
+          const isExpired = dayjs(validTime).isBefore(now)
+          item.status = isExpired ? 101 : Number(s)
+          const sObj = sList.find(({ key }) => key === item.status)
+          item.sText = sObj.text
+          item.isValid = sObj.isValid
+          item.sClass = sObj.isValid ? 'folder__item__label--valid' : 'folder__item__label--invalid'
           return item
         })
         this.isLoading = false
@@ -97,11 +107,18 @@ export default {
         const orderObj = this.list.find(item => item.id === id)
         this.selectedOrder = JSON.parse(JSON.stringify(orderObj))
       }
+      if (!this.selectedOrder.isValid) { return }
       this.isShowModal = true
     },
-    isBeforeNow(date) {
-      const now = dayjs(new Date())
-      return dayjs(date).isBefore(now)
+    // 在 igmur 連結後面加 m 可取得縮圖
+    convertImageLink(link) {
+      const imgLink = link.split('.')
+      const linkPath = imgLink.reduce((all, curr, idx) => {
+        if (idx === imgLink.length - 1) { return all }
+        return `${all}.${curr}`
+      })
+      const fileType = imgLink[imgLink.length - 1]
+      return `${linkPath}m.${fileType}`
     }
   }
 }
