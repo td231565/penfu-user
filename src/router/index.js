@@ -50,6 +50,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "ProfileFolder" */ '../views/profile/Folder.vue')
   },
   {
+    path: '/bike/index',
+    name: 'BikeEntry',
+    component: () => import(/* webpackChunkName: "BikeEntry" */ '../views/bike/Entry.vue')
+  },
+  {
     path: '/bike/scan',
     name: 'BikeScan',
     component: () => import(/* webpackChunkName: "BikeScan" */ '../views/bike/Scan.vue')

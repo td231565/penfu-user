@@ -33,7 +33,7 @@
             <VueQrcode :value="item.uuid" :options="qrOptions" style="margin-top: -3px;" />
           </div>
           <div class="ticket__right">
-            <p class="mt-1 mb-2">{{ item.title }}</p>
+            <p class="ellipsis-1 mt-1 mb-2">{{ item.title }}</p>
             <p class="my-0 text-blue fs-7">訂單有效</p>
             <p v-if="item.productCategory === '票券'" class="my-0 text-secondary fs-7">有效日期 {{ item.validTime.replace('T', ' ').slice(0, -3) }}</p>
           </div>

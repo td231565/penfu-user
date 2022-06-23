@@ -20,25 +20,25 @@ export default {
     if (location.search.includes('richmenu')) {
       localStorage.setItem('path', location.pathname)
     }
-    liff.init({
-      liffId: '1657060057-zx3LN0rZ',
-      withLoginOnExternalBrowser: true
-    }).then(() => {
-      if (liff.isLoggedIn()) {
-        liff.getProfile().then(profile => {
-          this.setLineProfile(profile)
-          // 新加入的使用者導頁去填寫個人資料
-          this.userLogin(profile.userId)
-        })
-      } else {
-        // 取得使用者要去的 route 讓他再回去
-        // liff.login({
-        //   redirectUri: 'https://stellular-kheer-3800d2.netlify.app/'
-        // })
-      }
-    }).catch(err => {
-      console.log(err)
-    })
+    // liff.init({
+    //   liffId: '1657060057-zx3LN0rZ',
+    //   withLoginOnExternalBrowser: true
+    // }).then(() => {
+    //   if (liff.isLoggedIn()) {
+    //     liff.getProfile().then(profile => {
+    //       this.setLineProfile(profile)
+    //       // 新加入的使用者導頁去填寫個人資料
+    //       this.userLogin(profile.userId)
+    //     })
+    //   } else {
+    //     // 取得使用者要去的 route 讓他再回去
+    //     // liff.login({
+    //     //   redirectUri: 'https://stellular-kheer-3800d2.netlify.app/'
+    //     // })
+    //   }
+    // }).catch(err => {
+    //   console.log(err)
+    // })
   },
   methods: {
     ...mapMutations(['setLineProfile', 'setUserInfo']),
