@@ -136,12 +136,9 @@
       </el-card>
       <div v-if="currentStepId === 2" class="w-90 mx-auto mt-3">
         <el-checkbox :value="rentData.termsChecked === 'Y'" @change="(status) => { rentData.termsChecked = status ? 'Y' : 'N' }">我同意此設備租賃合約</el-checkbox>
-        <div class="border-bottom bg-light p-2 mt-3">
-          <div class="position-relative">
-            <p class="my-0 position-absolute">簽名</p>
-            <vueSignature ref="canvas" :defaultUrl="rentData.signImage" :sigOption="sigOption" />
-            <el-button type="text" class="position-absolute bottom-0 end-0 p-0" @click="clear">清除</el-button>
-          </div>
+        <div ref="signWrap" class="border-bottom bg-light p-2 mt-3 d-flex justify-content-center align-items-center" style="min-height: 150px;" @click="dialogVisible = true">
+          <p v-if="!rentData.signImage" class="my-0 text-secondary">點擊此處簽名</p>
+          <img v-else ref="signImg" :src="rentData.signImage" alt="" class="w-100">
         </div>
       </div>
       <div v-if="currentStepId === 3" class="w-90 mx-auto mt-3">
@@ -155,6 +152,20 @@
       <button v-else class="btn rounded ms-4 fs-6" @click="currentStepId--">上一步</button>
       <button class="btn rounded ms-4 fs-6" @click="nextStep">{{ currentStepId === 3 ? '確定' : '下一步'}}</button>
     </div>
+    <!-- 簽名視窗 -->
+    <el-dialog
+      ref="dialog"
+      :visible.sync="dialogVisible"
+      :fullscreen="true"
+      :show-close="false"
+      custom-class="product-purchase-dialog rounded-3"
+    >
+      <vueSignature ref="canvas" :defaultUrl="rentData.signImage" :sigOption="sigOption" w="100%" h="100vh" />
+      <div class="position-absolute end-0" style="transform: rotate(-90deg); top: 50px;">
+        <el-button type="text" class="p-0" @click="clear">清除</el-button>
+        <el-button type="text" class="p-0" @click="updateCanvasUrl">確定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -200,7 +211,7 @@ export default {
       },
       sigOption: {
         penColor: 'rgb(0, 0, 0)',
-        backgroundColor: 'transparent'
+        backgroundColor: 'rgb(255, 255, 255)'
       }
     }
   },
@@ -226,13 +237,6 @@ export default {
       const m = dayjs().month() + 1
       const d = dayjs().date()
       return `民國 ${y} 年 ${m} 月 ${d} 日`
-    }
-  },
-  watch: {
-    currentStepId(id) {
-      if (id === 3) {
-        this.rentData.signImage = this.exportSignatureImage()
-      }
     }
   },
   async created() {
@@ -322,6 +326,28 @@ export default {
     },
     exportSignatureImage() {
       return this.$refs.canvas.save()
+    },
+    updateCanvasUrl() {
+      this.rentData.signImage = this.exportSignatureImage()
+
+      const canvas = document.createElement('canvas')
+      const ctx = canvas.getContext('2d')
+      const img = new Image()
+      const { width: cw, height: ch } = this.$refs.canvas.$el.querySelector('canvas')
+      img.src = this.rentData.signImage
+      img.onload = (ev) => {
+        canvas.width = ch
+        canvas.height = cw
+        ctx.save()
+        ctx.translate(ch, cw / ch)
+        ctx.rotate(90 * Math.PI / 180)
+        ctx.drawImage(img, 0, 0)
+        ctx.restore()
+        this.rentData.signImage = canvas.toDataURL()
+        canvas.remove()
+      }
+
+      this.dialogVisible = false
     }
   }
 }
@@ -330,5 +356,8 @@ export default {
 <style lang="scss" scoped>
 .disabled {
   filter: grayscale(1);
+}
+.sign-image {
+  --scale-size: 1;
 }
 </style>
