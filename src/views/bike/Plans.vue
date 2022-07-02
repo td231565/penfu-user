@@ -161,7 +161,7 @@
       custom-class="product-purchase-dialog rounded-3"
     >
       <vueSignature ref="canvas" :defaultUrl="rentData.signImage" :sigOption="sigOption" w="100%" h="100vh" />
-      <div class="position-absolute end-0" style="transform: rotate(-90deg); top: 50px;">
+      <div class="position-absolute end-0" style="transform: rotate(-90deg); top: 50%;">
         <el-button type="text" class="p-0" @click="clear">清除</el-button>
         <el-button type="text" class="p-0" @click="updateCanvasUrl">確定</el-button>
       </div>
