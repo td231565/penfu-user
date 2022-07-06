@@ -199,7 +199,7 @@ export default {
         delete this.purchaseData.time
       }
       for (const key in this.purchaseData) {
-        if (!this.purchaseData[key]) {
+        if (!this.purchaseData[key] && key !== 'comment') {
           this.$message.error('請填寫完整資訊')
           return
         }
