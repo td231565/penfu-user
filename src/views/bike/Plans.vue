@@ -120,7 +120,7 @@
         <p v-if="rentData.planID === 1">(一)租金：每日（A.M.9:00-17:30）新台幣 200 元整，共計新台幣 <span class="border-bottom border-dark">200</span> 元整。</p>
         <p v-else-if="rentData.planID === 2">(一)租金：每日（A.M.9:00-17:30）新台幣 300 元整，共計新台幣 <span class="border-bottom border-dark">300</span> 元整。</p>
         <p v-else-if="rentData.planID === 3">(一)租金：每 1 時新台幣 200 元整(第一小時400元)，共 <span class="border-bottom border-dark">{{ rentDuring }}</span> 時，計新台幣 <span class="border-bottom border-dark">{{ paymentActualCost }}</span> 元。</p>
-        <p>(二)押金：新台幣<span class="border-bottom border-dark">{{ selectedPlan.paymentDeposit }}</span>元整。 （付款方式：現金）</p>
+        <p v-if="rentData.depositWay === 5">(二)押金：新台幣<span class="border-bottom border-dark">{{ selectedPlan.paymentDeposit }}</span>元整。 （付款方式：現金）</p>
         <p>三、	乙方因本租賃同意交付甲方 <span class="border-bottom border-dark">{{ rentData.depositWay === 5 ? '   ' : depositWayList.find(({id}) => id === rentData.depositWay).title }}</span>。</p>
         <p>四、	乙方應依約定時間交還車輛，歸還日期超過一天，則需按天加收2000元租金／單組。但因車輛本身機件故障或不可歸責於乙方之事由，致乙方不能依約定時間交還車輛者，不在此限。乙方有前項但書情形得為通知者，乙方應即通知甲方。</p>
         <p>五、	甲方於乙方還車時，經檢查確無損壞或遺失配件後，應即無息返還押金。惟倘若乙方歸還車輛、設備等因遺失、毀損達無法修復程度者，甲方得沒收押金，乙方應照當時市價賠償；如毀損但可修復者，甲方得沒收押金，修理期間在三日以內者，並應償付該期間百分之七十之租金；在四日以上十日以內者，並應償付該期間百分之六十之租金；在十一日以上者，並應償付該期間百分之五十之租金。但期間之計算，最長以十五日為限。</p>

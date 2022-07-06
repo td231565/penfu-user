@@ -4,7 +4,8 @@
       <img :src="paymentInfo.imageLink" alt="" class="w-100">
     </header>
     <div class="text-center">
-      <p class="fs-2 my-2">訂購成功</p>
+      <p class="fs-2 my-1">已完成訂購申請</p>
+      <p class="fs-5 my-2">等待服務人員核准中，您可至會員中心裡的（我的訂單），查詢票卷核發進度。</p>
       <i class="el-icon-circle-check text-blue fw-bold" style="font-size: 88px;"></i>
     </div>
     <div class="mt-3 px-4">
