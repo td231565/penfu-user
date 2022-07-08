@@ -21,8 +21,8 @@ export default {
       localStorage.setItem('path', location.pathname)
     }
     liff.init({
-      liffId: '1657060057-zx3LN0rZ',
-      withLoginOnExternalBrowser: true
+      liffId: '1657060057-zx3LN0rZ'
+      // withLoginOnExternalBrowser: true
     }).then(() => {
       if (liff.isLoggedIn()) {
         liff.getProfile().then(profile => {
