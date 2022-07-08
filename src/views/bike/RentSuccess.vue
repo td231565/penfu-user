@@ -2,7 +2,7 @@
   <div v-loading.fullscreen.lock="isLoading">
     <header class="bg-blue d-flex align-items-center p-3">
       <div class="w-1-3">
-        <i class="el-icon-close text-white fs-5" @click="closeWindow"></i>
+        <!-- <i class="el-icon-close text-white fs-5" @click="closeWindow"></i> -->
       </div>
       <!-- <p class="w-1-3 my-0 text-center text-white fs-5">租借成功</p> -->
     </header>

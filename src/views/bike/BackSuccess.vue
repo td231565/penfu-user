@@ -2,7 +2,7 @@
   <div v-loading.fullscreen.lock="isLoading">
     <header class="bg-blue d-flex align-items-center p-3">
       <div class="w-1-3">
-        <i class="el-icon-close text-white fs-5" @click="closeWindow"></i>
+        <!-- <i class="el-icon-close text-white fs-5" @click="closeWindow"></i> -->
       </div>
       <p class="w-1-3 my-0 text-center text-white fs-5">歸還成功</p>
     </header>
@@ -38,7 +38,7 @@
     </div>
     <div class="mt-4 px-4 pb-3 d-flex justify-content-center">
       <!-- <button class="btn me-4 w-35 rounded-3">列印</button> -->
-      <button class="btn w-35 rounded-3 fs-6" @click="closeWindow">確認</button>
+      <!-- <button class="btn w-35 rounded-3 fs-6" @click="closeWindow">確認</button> -->
     </div>
   </div>
 </template>
