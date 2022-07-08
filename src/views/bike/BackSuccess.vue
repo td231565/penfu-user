@@ -59,8 +59,13 @@ export default {
   },
   methods: {
     closeWindow() {
-      liff.closeWindow()
-      window.close()
+      liff.init({
+        liffId: '1657060057-zx3LN0rZ',
+        withLoginOnExternalBrowser: true
+      }).then(() => {
+        liff.closeWindow()
+        window.close()
+      })
     }
   }
 }

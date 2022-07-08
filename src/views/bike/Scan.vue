@@ -22,6 +22,7 @@
 </template>
 
 <script>
+import liff from '@line/liff'
 import axios from '@/api'
 import { QrcodeStream } from 'vue-qrcode-reader'
 import { mapState } from 'vuex'
@@ -101,7 +102,13 @@ export default {
       this.$router.push(`/bike/status/${orderId}`)
     },
     closeWindow() {
-      window.close()
+      liff.init({
+        liffId: '1657060057-zx3LN0rZ',
+        withLoginOnExternalBrowser: true
+      }).then(() => {
+        liff.closeWindow()
+        window.close()
+      })
     }
   }
 }
