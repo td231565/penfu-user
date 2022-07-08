@@ -95,6 +95,7 @@ export default {
     },
     closeWindow() {
       liff.closeWindow()
+      window.close()
     }
   }
 }

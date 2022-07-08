@@ -54,6 +54,7 @@ export default {
   methods: {
     closeWindow() {
       liff.closeWindow()
+      window.close()
     },
     gotoProfileFolder() {
       this.$router.push({ name: 'ProfileFolder' })

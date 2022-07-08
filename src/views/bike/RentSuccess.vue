@@ -38,7 +38,7 @@
     </div>
     <div class="mt-4 px-4 pb-3 d-flex justify-content-center">
       <!-- <button class="btn me-4 w-35 rounded-3">列印</button> -->
-      <button class="btn w-35 rounded-3 fs-6" @click="closeWindow">確認</button>
+      <button class="btn w-35 rounded-3 fs-6" @click="gotoPlansEntry">確認</button>
     </div>
   </div>
 </template>
@@ -97,6 +97,10 @@ export default {
     },
     closeWindow() {
       liff.closeWindow()
+      window.close()
+    },
+    gotoPlansEntry() {
+      this.$router.push({ name: 'BikeEntry' })
     }
   }
 }

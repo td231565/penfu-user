@@ -60,6 +60,7 @@ export default {
   methods: {
     closeWindow() {
       liff.closeWindow()
+      window.close()
     }
   }
 }
