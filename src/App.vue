@@ -20,8 +20,10 @@ export default {
     if (location.search.includes('richmenu')) {
       localStorage.setItem('path', location.pathname)
     }
+    console.log('start')
     liff.init({
       liffId: '1657060057-zx3LN0rZ',
+      // liffId: '1657060057-waPNJ3Bl',
       withLoginOnExternalBrowser: true
     }).then(() => {
       if (liff.isLoggedIn()) {
