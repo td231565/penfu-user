@@ -37,8 +37,8 @@ export default new Vuex.Store({
     liffInit({ commit }) {
       return new Promise((resolve, reject) => {
         liff.init({
-          // liffId: '1657060057-zx3LN0rZ',
-          liffId: '1657060057-waPNJ3Bl',
+          liffId: '1657060057-zx3LN0rZ',
+          // liffId: '1657060057-waPNJ3Bl', // test
           withLoginOnExternalBrowser: true
         }).then(() => {
           if (liff.isLoggedIn()) {
