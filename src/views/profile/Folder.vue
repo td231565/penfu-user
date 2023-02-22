@@ -42,7 +42,7 @@
 <script>
 import dayjs from 'dayjs'
 import axios from '@/api'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import TicketModal from './components/TicketModal.vue'
 
 export default {
@@ -69,9 +69,16 @@ export default {
     }
   },
   created() {
-    this.getList()
+    if (!this.lineUid) {
+      this.liffInit().then(() => {
+        this.getList()
+      })
+    } else {
+      this.getList()
+    }
   },
   methods: {
+    ...mapActions(['liffInit']),
     getList() {
       this.isLoading = true
       const now = dayjs(new Date())
