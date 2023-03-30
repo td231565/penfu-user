@@ -55,7 +55,7 @@
 <script>
 import dayjs from 'dayjs'
 import VueQrcode from '@chenfengyuan/vue-qrcode'
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import axios from '@/api'
 import TicketModal from './components/TicketModal.vue'
 
@@ -75,9 +75,16 @@ export default {
     ...mapState(['userInfo', 'lineUid', 'linePhotoUrl'])
   },
   created() {
-    this.getOrders()
+    if (!this.lineUid) {
+      this.liffInit().then(() => {
+        this.getOrders()
+      })
+    } else {
+      this.getOrders()
+    }
   },
   methods: {
+    ...mapActions(['liffInit']),
     getOrders() {
       this.isLoading = true
       const now = dayjs(new Date())

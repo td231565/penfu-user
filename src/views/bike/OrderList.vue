@@ -32,7 +32,7 @@
 import liff from '@line/liff'
 import axios from '@/api'
 import dayjs from 'dayjs'
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations, mapActions } from 'vuex'
 
 export default {
   name: 'BikeOrderList',
@@ -48,10 +48,17 @@ export default {
   },
   created() {
     this.getAllPlans()
-    this.getRentOrderList()
+    if (!this.lineUid) {
+      this.liffInit().then(() => {
+        this.getRentOrderList()
+      })
+    } else {
+      this.getRentOrderList()
+    }
   },
   methods: {
     ...mapMutations(['setPlans']),
+    ...mapActions(['liffInit']),
     getRentOrderList() {
       this.isLoading = true
       const url = `/car_order/return/check/${this.lineUid}`

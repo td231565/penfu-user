@@ -44,7 +44,7 @@ export default {
     },
     async handlerQrcodeInit(promise) {
       try {
-        const { capabilities } = await promise
+        // const { capabilities } = await promise
       // successfully initialized
       } catch (error) {
         console.log(error)
